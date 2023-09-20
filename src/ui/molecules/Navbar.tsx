@@ -17,11 +17,12 @@ const navLinkList: Array<{ href: NavLinks; label: string; exact: boolean }> = [
 
 export const Navbar = () => {
 	return (
-		<nav>
+		<nav role="navigation">
 			<ul className="flex justify-center space-x-4 p-4 text-xl">
 				{navLinkList.map((link) => (
 					<li key={link.label}>
 						<ActiveLink
+							role="link"
 							exact={link.exact}
 							className="font-medium text-blue-300"
 							activeClassName="underline"

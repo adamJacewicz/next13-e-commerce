@@ -24,7 +24,12 @@ export function ActiveLink<T extends string>({
 	const pathName = usePathname();
 	const isActive = !!exact ? href === pathName : pathName.startsWith(href);
 	return (
-		<Link href={href} className={twMerge(className, isActive && activeClassName)} {...rest}>
+		<Link
+			{...(isActive ? { "aria-current": "page" } : {})}
+			href={href}
+			className={twMerge(className, isActive && activeClassName)}
+			{...rest}
+		>
 			{children}
 		</Link>
 	);
