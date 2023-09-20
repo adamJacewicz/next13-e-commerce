@@ -12,7 +12,9 @@ export const ProductList = ({ products }: ProductListProps) => {
 			className="gap grid grid-cols-1 gap-8 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
 		>
 			{products.map((product) => (
-				<ProductListItem key={product.id} product={product} />
+				<li key={product.id}>
+					<ProductListItem product={product} />
+				</li>
 			))}
 		</ul>
 	);
