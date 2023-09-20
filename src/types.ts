@@ -1,8 +1,3 @@
-// declare module "src/public/*.svg" {
-// 	import type React from "react";
-// 	const SVG: React.VFC<React.SVGProps<SVGSVGElement>>;
-// 	export default SVG;
-// }
 export type ProductRating = {
 	rate: number;
 	count: number;
