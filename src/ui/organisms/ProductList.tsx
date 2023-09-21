@@ -1,17 +1,15 @@
 import { ProductListItem } from "@/ui/molecules/ProductListItem";
-import { fetchProducts } from "@/service/product.service";
+import { type ProductItemType } from "@/types";
 
 type ProductListProps = {
-	page: number;
+	products: ProductItemType[];
 };
 
-export async function ProductList({ page }: ProductListProps) {
-	const products = await fetchProducts({ perPage: 20, page });
-
+export function ProductList({ products }: ProductListProps) {
 	return (
 		<ul
 			data-testid="products-list"
-			className="gap grid grid-cols-1 gap-8 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+			className="grid grid-cols-1 gap-8 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
 		>
 			{products.map((product) => (
 				<li key={product.id}>

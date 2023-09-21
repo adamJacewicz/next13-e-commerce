@@ -16,7 +16,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 		<html lang="en">
 			<body className={inter.className}>
 				<Navbar />
-				<section className="sm:py mx-auto max-w-md p-12 sm:max-w-2xl sm:py-16 md:max-w-4xl lg:max-w-7xl">
+				<section className="sm:py mx-auto flex max-w-md justify-center p-12 sm:max-w-2xl sm:py-16 md:max-w-4xl lg:max-w-7xl">
 					{children}
 				</section>
 			</body>

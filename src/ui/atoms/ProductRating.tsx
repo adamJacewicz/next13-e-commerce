@@ -1,4 +1,3 @@
-import { twMerge } from "tailwind-merge";
 import Star from "@/public/star.svg";
 
 type ProductRaringProps = {
@@ -14,12 +13,10 @@ export function ProductRating({ rating }: ProductRaringProps) {
 				{Array(5)
 					.fill(0)
 					.map((_, i) => (
-						<Star key={i} className={twMerge(i < stars ? "text-yellow-500" : "text-gray-400")} />
+						<Star key={i} className={i < stars ? "text-yellow-500" : "text-gray-400"} />
 					))}
 			</div>
-			<p className="text-sm">
-				({rating})<span className="sr-only"> out of 5 stars</span>
-			</p>
+			<p className="text-sm">({rating})</p>
 		</div>
 	);
 }

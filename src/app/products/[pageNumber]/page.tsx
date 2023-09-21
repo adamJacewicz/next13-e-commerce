@@ -1,34 +1,26 @@
-import { redirect } from "next/navigation";
-import { Suspense } from "react";
 import { ProductList } from "@/ui/organisms/ProductList";
 import { Pagination } from "@/ui/molecules/Pagination";
+import { fetchProducts } from "@/service/product.service";
 
 type ProductsPageParams = {
 	pageNumber: string;
 };
 
-const TOTAL = 100;
-const PER_PAGE = 20;
+const PER_PAGE = 10;
 
 export async function generateStaticParams() {
-	return Array.from({ length: TOTAL / PER_PAGE }, (_, i) => i + 1).map((pageNumber) => ({
-		pageNumber: pageNumber.toString(),
+	return Array.from({ length: 50 / PER_PAGE }, (_, i) => `${i + 1}`).map((pageNumber) => ({
+		pageNumber,
 	}));
 }
-
 export default async function ProductsPage({ params }: { params: ProductsPageParams }) {
 	const page = Number(params.pageNumber);
-	const totalPages = Math.ceil(TOTAL / PER_PAGE);
-	if (page > totalPages || page <= 0) {
-		redirect("/products/1");
-	}
+	const { products, totalCount } = await fetchProducts({ page });
 
 	return (
-		<>
-			<Suspense>
-				<ProductList page={page} />
-			</Suspense>
-			<Pagination page={page} total={TOTAL} />
-		</>
+		<div className="flex flex-col">
+			<ProductList products={products} />
+			<Pagination page={page} total={totalCount} />
+		</div>
 	);
 }

@@ -1,16 +1,13 @@
 "use client";
 import { twMerge } from "tailwind-merge";
-import type { ReactNode } from "react";
 import Link, { type LinkProps } from "next/link";
 import { usePathname } from "next/navigation";
 import type { Route } from "next";
 
 interface ActiveLinkProps<T extends string> extends LinkProps<T> {
-	className?: string;
-	href: Route<T>;
 	activeClassName: string;
-	children: ReactNode;
 	exact?: boolean;
+	href: Route<T>;
 }
 
 export function ActiveLink<T extends string>({
@@ -25,7 +22,7 @@ export function ActiveLink<T extends string>({
 	const isActive = !!exact ? href === pathName : pathName.startsWith(href);
 	return (
 		<Link
-			{...(isActive ? { "aria-current": "page" } : {})}
+			aria-current={isActive ? "page" : undefined}
 			href={href}
 			className={twMerge(className, isActive && activeClassName)}
 			{...rest}

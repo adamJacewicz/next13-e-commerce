@@ -2,15 +2,13 @@ import { ProductCoverImage } from "@/ui/atoms/ProductCoverImage";
 import { ProductListItemHead } from "@/ui/atoms/ProductListItemHead";
 import { ProductRating } from "@/ui/atoms/ProductRating";
 import { ProductListItemDescription } from "@/ui/atoms/ProductListItemDescription";
-import { fetchProductById } from "@/service/product.service";
+import { type ProductItemType } from "@/types";
 
 type ProductListPageProps = {
-	productId: string;
+	product: ProductItemType;
 };
 
-export async function ProductItemPage({ productId }: ProductListPageProps) {
-	const product = await fetchProductById(productId);
-
+export async function ProductItemPage({ product }: ProductListPageProps) {
 	return (
 		<article className="mx-auto flex max-w-2xl">
 			<header className="flex-1">

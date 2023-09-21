@@ -1,4 +1,3 @@
-"use client";
 import { twMerge } from "tailwind-merge";
 import Link from "next/link";
 import { ActiveLink } from "@/ui/atoms/ActiveLink";
@@ -9,15 +8,15 @@ type PaginationProps = {
 	pageSize?: number;
 };
 
-export function Pagination({ total, pageSize = 20, page }: PaginationProps) {
+export function Pagination({ page, pageSize = 10, total }: PaginationProps) {
 	const totalPages = Math.ceil(total / pageSize);
 	const visiblePages = Math.min(9, totalPages);
+	const siblingCount = Math.floor(visiblePages / 2);
 
 	const pages = Array.from({ length: visiblePages }, (_, i) => {
-		const gap = Math.floor(visiblePages / 2);
-		if (page + gap >= totalPages) return totalPages - visiblePages + i + 1;
-		if (page - gap <= 0) return i + 1;
-		return i + page - gap;
+		if (page + siblingCount >= totalPages) return totalPages - visiblePages + i + 1;
+		if (page - siblingCount <= 0) return i + 1;
+		return i + page - siblingCount;
 	});
 
 	const hasNextPage = page !== totalPages;
@@ -60,7 +59,7 @@ export function Pagination({ total, pageSize = 20, page }: PaginationProps) {
 				>
 					&#62;
 				</Link>
-			</li>{" "}
+			</li>
 		</ul>
 	);
 }

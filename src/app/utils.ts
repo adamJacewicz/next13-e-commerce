@@ -7,15 +7,14 @@ export function formatMoney(value: number) {
 	}).format(value);
 }
 
-export function productResponseToProductItem(product: ProductItemResponse): ProductItemType {
+export function productResponseToProductItem({
+	title,
+	image,
+	...rest
+}: ProductItemResponse): ProductItemType {
 	return {
-		id: product.id,
-		category: product.category,
-		name: product.title,
-		price: product.price,
-		rating: product.rating,
-		description: product.description,
-		longDescription: product.longDescription,
-		coverImage: { src: product.image, alt: product.title },
+		...rest,
+		name: title,
+		coverImage: { src: image, alt: title },
 	};
 }
