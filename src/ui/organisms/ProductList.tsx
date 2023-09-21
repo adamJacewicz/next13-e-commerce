@@ -1,11 +1,13 @@
-import type { ProductItemType } from "@/types";
 import { ProductListItem } from "@/ui/molecules/ProductListItem";
+import { fetchProducts } from "@/service/product.service";
 
 type ProductListProps = {
-	products: ProductItemType[];
+	page: number;
 };
 
-export const ProductList = ({ products }: ProductListProps) => {
+export async function ProductList({ page }: ProductListProps) {
+	const products = await fetchProducts({ perPage: 20, page });
+
 	return (
 		<ul
 			data-testid="products-list"
@@ -18,4 +20,4 @@ export const ProductList = ({ products }: ProductListProps) => {
 			))}
 		</ul>
 	);
-};
+}

@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 import { ProductList } from "@/ui/organisms/ProductList";
-import { fetchProducts } from "@/service/product.service";
 import { Pagination } from "@/ui/molecules/Pagination";
 
 type ProductsPageParams = {
@@ -23,11 +23,11 @@ export default async function ProductsPage({ params }: { params: ProductsPagePar
 		redirect("/products/1");
 	}
 
-	const products = await fetchProducts({ perPage: 20, page });
-
 	return (
 		<>
-			<ProductList products={products} />
+			<Suspense>
+				<ProductList page={page} />
+			</Suspense>
 			<Pagination page={page} total={TOTAL} />
 		</>
 	);
