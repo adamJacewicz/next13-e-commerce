@@ -24,7 +24,10 @@ export function Pagination({ total, pageSize = 20, page }: PaginationProps) {
 	const hasPreviousPage = page !== 1;
 
 	return (
-		<ul className="mx-auto mt-10 flex max-w-xl justify-center gap-2 p-2 font-medium text-gray-900">
+		<ul
+			aria-label="pagination"
+			className="mx-auto mt-10 flex max-w-xl justify-center gap-2 p-2 font-medium text-gray-900"
+		>
 			<li>
 				<Link
 					className={twMerge(

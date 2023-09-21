@@ -11,8 +11,9 @@ const TOTAL = 100;
 const PER_PAGE = 20;
 
 export async function generateStaticParams() {
-	const products = await fetchProducts({ perPage: TOTAL });
-	return products.map((product) => ({ productId: product.id }));
+	return Array.from({ length: TOTAL / PER_PAGE }, (_, i) => i + 1).map((pageNumber) => ({
+		pageNumber: pageNumber.toString(),
+	}));
 }
 
 export default async function ProductsPage({ params }: { params: ProductsPageParams }) {
