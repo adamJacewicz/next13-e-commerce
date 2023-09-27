@@ -1,0 +1,10 @@
+query ProductsGetListBySearchQuery($skip: Int , $first: Int, $query: String) {
+    products(where: {_search: $query}, skip: $skip, first: $first) {
+        ...ProductListItem
+    }
+    productsConnection {
+        aggregate {
+            count
+        }
+    }
+}

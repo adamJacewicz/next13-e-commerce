@@ -1,0 +1,10 @@
+query ProductsGetList($skip: Int , $first: Int) {
+    products(skip: $skip, first: $first) {
+        ...ProductListItem
+    }
+    productsConnection {
+        aggregate {
+            count
+        }
+    }
+}

@@ -1,26 +1,30 @@
-import { ProductList } from "@/ui/organisms/ProductList";
-import { Pagination } from "@/ui/molecules/Pagination";
-import { fetchProducts } from "@/service/product.service";
+import { getProductList } from "@/service/product.service";
+import { PRODUCTS_PER_PAGE } from "@/constants";
+import { ProductList } from "@/components/molecules/ProductList";
+import { Pagination } from "@/components/molecules/Pagination";
 
 type ProductsPageParams = {
 	pageNumber: string;
 };
 
-const PER_PAGE = 10;
-
 export async function generateStaticParams() {
-	return Array.from({ length: 50 / PER_PAGE }, (_, i) => `${i + 1}`).map((pageNumber) => ({
-		pageNumber,
+	const { count } = await getProductList();
+
+	return Array.from({ length: Math.ceil(count / PRODUCTS_PER_PAGE) }, (_, i) => ({
+		pageNumber: `${i + 1}`,
 	}));
 }
 export default async function ProductsPage({ params }: { params: ProductsPageParams }) {
 	const page = Number(params.pageNumber);
-	const { products, totalCount } = await fetchProducts({ page });
 
+	const { products, count } = await getProductList({
+		page,
+		perPage: PRODUCTS_PER_PAGE,
+	});
 	return (
 		<div className="flex flex-col">
 			<ProductList products={products} />
-			<Pagination page={page} total={totalCount} />
+			<Pagination page={page} total={count} />
 		</div>
 	);
 }

@@ -1,0 +1,5 @@
+query ProductsGetRecommendationList {
+    products(orderBy: publishedAt_ASC, where: {reviews_some: {rating_gte: 4}}, first: 4) {
+        ...ProductListItem
+    }
+}

@@ -1,24 +1,33 @@
 import type { Metadata } from "next";
-import { fetchProductById, fetchProducts } from "@/service/product.service";
-import { ProductItemPage } from "@/ui/organisms/ProductItemPage";
+import { Suspense } from "react";
+import { ProductItem } from "@/components/organisms/ProductItem";
+import { getProductById } from "@/service/product.service";
+import { ProductRecommendationList } from "@/components/molecules/ProductRecommendationList";
+import { LoadingIndicator } from "@/components/atoms/LoadingIndicator";
 
 export async function generateMetadata({
 	params,
 }: {
 	params: { productId: string };
 }): Promise<Metadata> {
-	const product = await fetchProductById(params.productId);
+	const product = await getProductById(params.productId);
 	return {
-		title: product.name,
-		description: product.description,
+		title: product?.name,
+		description: product?.description,
 	};
-}
-export async function generateStaticParams() {
-	const { products } = await fetchProducts({ perPage: 50, page: 1 });
-	return products.map((product) => ({ productId: product.id }));
 }
 
 export default async function ProductPage({ params }: { params: { productId: string } }) {
-	const product = await fetchProductById(params.productId);
-	return <ProductItemPage product={product} />;
+	const product = await getProductById(params.productId);
+	if (!product) return null;
+	return (
+		<div>
+			<ProductItem product={product} />
+			<Suspense fallback={<LoadingIndicator />}>
+				<aside className="mt-12">
+					<ProductRecommendationList />
+				</aside>
+			</Suspense>
+		</div>
+	);
 }
