@@ -1,4 +1,4 @@
-import { ProductCoverImage } from "@/components/atoms/ProductCoverImage";
+import { ProductImage } from "@/components/atoms/ProductImage";
 import { ProductListItemDescription } from "@/components/atoms/ProductListItemDescription";
 import { type ProductListItemFragment, type ProductVariantsFragment } from "@/gql/graphql";
 import { Select } from "@/components/atoms/Select";
@@ -14,7 +14,7 @@ export async function ProductItem({ product }: ProductListPageProps) {
 	return (
 		<article className="grid grid-cols-1 gap-6 md:grid-cols-2">
 			<header>
-				<ProductCoverImage src={product.images[0].url} alt={product.name} />
+				<ProductImage src={product.images[0].url} alt={product.name} />
 			</header>
 
 			<div className="flex flex-1 flex-col gap-4 px-4 py-2">

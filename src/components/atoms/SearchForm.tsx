@@ -14,10 +14,10 @@ export function SearchForm() {
 		const value = formData.get("query")?.toString() ?? "";
 		router.push(`/search?query=${value}`);
 	}
-	const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+	function onChange(e: ChangeEvent<HTMLInputElement>) {
 		const value = e.target.value;
 		router.push(`/search?query=${value}`);
-	};
+	}
 
 	const debouncedOnChange = useDebounce(onChange, 500);
 

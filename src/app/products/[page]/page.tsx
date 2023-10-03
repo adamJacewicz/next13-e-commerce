@@ -4,21 +4,19 @@ import { ProductList } from "@/components/molecules/ProductList";
 import { Pagination } from "@/components/molecules/Pagination";
 
 type ProductsPageParams = {
-	pageNumber: string;
+	page: string;
 };
 
 export async function generateStaticParams() {
 	const { count } = await getProductList();
-
 	return Array.from({ length: Math.ceil(count / PRODUCTS_PER_PAGE) }, (_, i) => ({
-		pageNumber: `${i + 1}`,
+		page: `${i + 1}`,
 	}));
 }
 export default async function ProductsPage({ params }: { params: ProductsPageParams }) {
-	const page = Number(params.pageNumber);
-
+	const page = Number(params.page);
 	const { products, count } = await getProductList({
-		page,
+		page: page,
 		perPage: PRODUCTS_PER_PAGE,
 	});
 	return (

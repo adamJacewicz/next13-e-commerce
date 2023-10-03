@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { ActiveLink } from "@/components/atoms/ActiveLink";
 import { navLinks } from "@/constants";
 import { SearchForm } from "@/components/atoms/SearchForm";
@@ -30,7 +31,9 @@ export const Navbar = () => {
 						))}
 					</ul>
 				</nav>
-				<SearchForm />
+				<Suspense>
+					<SearchForm />
+				</Suspense>
 			</div>
 		</div>
 	);
