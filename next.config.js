@@ -2,6 +2,7 @@
 const nextConfig = {
 	experimental: {
 		typedRoutes: true,
+		serverActions: true,
 	},
 	images: {
 		domains: ["media.graphassets.com"],
@@ -13,11 +14,11 @@ const nextConfig = {
 				destination: "/products/1",
 				permanent: true,
 			},
-			{
-				source: "/products/0",
-				destination: "/products/1",
-				permanent: true,
-			},
+			// {
+			// 	source: "/products/0",
+			// 	destination: "/products/1",
+			// 	permanent: true,
+			// },
 			{
 				source: "/categories/:slug",
 				destination: "/categories/:slug/1",
