@@ -3,28 +3,32 @@ const nextConfig = {
 	experimental: {
 		typedRoutes: true,
 	},
-	webpack(config) {
-		// Grab the existing rule that handles SVG imports
-		const fileLoaderRule = config.module.rules.find((rule) => rule.test?.test?.(".svg"));
-		config.module.rules.push(
-			// Reapply the existing rule, but only for svg imports ending in ?url
+	images: {
+		domains: ["media.graphassets.com"],
+	},
+	redirects: async () => {
+		return [
 			{
-				...fileLoaderRule,
-				test: /\.svg$/i,
-				resourceQuery: /url/, // *.svg?url
+				source: "/products",
+				destination: "/products/1",
+				permanent: true,
 			},
-			// Convert all other *.svg imports to React components
 			{
-				test: /\.svg$/i,
-				use: ["@svgr/webpack"],
-				resourceQuery: { not: /url/ }, // exclude if *.svg?url
+				source: "/products/0",
+				destination: "/products/1",
+				permanent: true,
 			},
-		);
-
-		// Modify the file loader rule to ignore *.svg, since we have it handled now.
-		fileLoaderRule.exclude = /\.svg$/i;
-
-		return config;
+			{
+				source: "/categories/:slug",
+				destination: "/categories/:slug/1",
+				permanent: true,
+			},
+			{
+				source: "/collections/:slug",
+				destination: "/collections/:slug/1",
+				permanent: true,
+			},
+		];
 	},
 };
 

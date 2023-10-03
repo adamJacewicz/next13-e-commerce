@@ -1,9 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/eslintrc.json",
-	"plugins": [
-		"@typescript-eslint",
-		"import"
-	],
+	"plugins": ["@typescript-eslint", "import"],
 	"parserOptions": {
 		"project": "tsconfig.json"
 	},
@@ -53,9 +50,7 @@
 			}
 		],
 		// false negatives
-		"import/namespace": [
-			"off"
-		],
+		"import/namespace": ["off"],
 		// we allow empty interfaces
 		"no-empty-pattern": "off",
 		"@typescript-eslint/no-empty-interface": "off",
@@ -64,10 +59,7 @@
 		// we sometimes use async functions that don't await anything
 		"@typescript-eslint/require-await": "off",
 		// make sure to `await` inside try…catch
-		"@typescript-eslint/return-await": [
-			"error",
-			"in-try-catch"
-		],
+		"@typescript-eslint/return-await": ["error", "in-try-catch"],
 		// allow unused vars prefixed with `_`
 		"@typescript-eslint/no-unused-vars": [
 			"error",
@@ -76,6 +68,14 @@
 				"varsIgnorePattern": "^_"
 			}
 		],
+		"no-restricted-imports": [
+			"error",
+			{
+				"name": "next/router",
+				"message": "Please use next/navigation instead"
+			}
+		],
+
 		// numbers and booleans are fine in template strings
 		"@typescript-eslint/restrict-template-expressions": [
 			"error",
@@ -87,17 +87,11 @@
 	},
 	"overrides": [
 		{
-			"files": [
-				"src/app/**/*.ts?(x)",
-				"./tailwind.config.ts"
-			],
+			"files": ["src/app/**/*.ts?(x)", "./tailwind.config.ts"],
 			"rules": {
 				"import/no-default-export": "off"
 			}
 		}
 	],
-	"ignorePatterns": [
-		"*.js",
-		"*.jsx"
-	]
+	"ignorePatterns": ["*.js", "*.jsx"]
 }

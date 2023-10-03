@@ -1,0 +1,20 @@
+fragment ProductVariants on Product {
+    variants {
+        ... on ProductColorVariant {
+            id
+            name
+            color
+        }
+        ... on ProductSizeColorVariant {
+            id
+            name
+            color
+            size
+        }
+        ... on ProductSizeVariant {
+            id
+            name
+            size
+        }
+    }
+}
