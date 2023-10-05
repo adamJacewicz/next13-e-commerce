@@ -36,7 +36,7 @@ export default async function CollectionPage({
 		<div className="flex flex-col">
 			<h2>{collection.name}</h2>
 			<ProductList products={products} />
-			<Pagination page={page} total={count} />
+			<Pagination pathName={`/collections/${params.collection}`} page={page} total={count} />
 		</div>
 	);
 }
