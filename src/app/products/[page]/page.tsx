@@ -22,7 +22,7 @@ export default async function ProductsPage({ params }: { params: ProductsPagePar
 	return (
 		<div className="flex flex-col">
 			<ProductList products={products} />
-			<Pagination page={page} total={count} />
+			<Pagination pathName="/products" page={page} total={count} />
 		</div>
 	);
 }

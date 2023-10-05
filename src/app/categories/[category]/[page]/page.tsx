@@ -37,7 +37,7 @@ export default async function CategoryPage({
 		<div className="flex flex-col">
 			<h2>{category.name}</h2>
 			<ProductList products={products} />
-			<Pagination page={page} total={count} />
+			<Pagination pathName={`/categories/${params.category}`} page={page} total={count} />
 		</div>
 	);
 }
