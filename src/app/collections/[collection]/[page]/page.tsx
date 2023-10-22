@@ -23,20 +23,27 @@ export default async function CollectionPage({
 }) {
 	const page = Number(params.page);
 
-	const [{ products, count }, collection] = await Promise.all([
+	const [{ products, pageInfo, count }, collection] = await Promise.all([
 		getProductsListByCollection({
 			slug: params.collection,
 			page,
 		}),
 		getCollectionBySlug(params.collection),
 	]);
+
 	return products.length === 0 ? (
 		<h2>No products</h2>
 	) : (
 		<div className="flex flex-col">
 			<h2>{collection.name}</h2>
 			<ProductList products={products} />
-			<Pagination pathName={`/collections/${params.collection}`} page={page} total={count} />
+			<Pagination
+				hasPreviousPage={pageInfo.hasPreviousPage}
+				hasNextPage={pageInfo.hasNextPage}
+				basePath={`/collections/${params.collection}`}
+				page={page}
+				total={count}
+			/>
 		</div>
 	);
 }

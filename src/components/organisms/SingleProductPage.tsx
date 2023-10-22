@@ -3,13 +3,28 @@ import { ProductListItemDescription } from "@/components/atoms/ProductListItemDe
 import { type ProductListItemFragment, type ProductVariantsFragment } from "@/gql/graphql";
 import { Select } from "@/components/atoms/Select";
 import { formatMoney, productVariantToSelectOption } from "@/utils";
+import { AddToCartButton } from "@/components/atoms/AddToCartButton";
+import { addToCart, getOrCreateCart } from "@/service/cart.service";
 
 type ProductListPageProps = {
 	product: ProductListItemFragment & ProductVariantsFragment;
 };
 
-export async function ProductItem({ product }: ProductListPageProps) {
+export async function SingleProductPage({ product }: ProductListPageProps) {
 	const variants = product.variants.map(productVariantToSelectOption);
+
+	async function addToCartAction() {
+		"use server";
+		const cart = await getOrCreateCart();
+		const productId = product.id;
+		const orderItem = cart?.orderItems?.find((item) => item?.product?.id === productId);
+		await addToCart({
+			orderId: orderItem ? orderItem.id : cart.id,
+			productId,
+			quantity: orderItem ? orderItem?.quantity + 1 : 1,
+			total: orderItem ? product.price * (orderItem.quantity + 1) : product.price,
+		});
+	}
 
 	return (
 		<article className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -34,12 +49,10 @@ export async function ProductItem({ product }: ProductListPageProps) {
 					<Select defaultFirstOption label="Select variant" options={variants} />
 				) : null}
 
-				<button
-					type="submit"
-					className="w-full rounded-md border border-transparent bg-blue-600 py-3 font-medium text-white hover:bg-blue-700"
-				>
-					Add to cart
-				</button>
+				<form action={addToCartAction}>
+					<AddToCartButton />
+				</form>
+
 				<ProductListItemDescription product={product} />
 			</div>
 		</article>

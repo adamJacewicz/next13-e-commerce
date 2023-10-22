@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { ProductItem } from "@/components/organisms/ProductItem";
+import { SingleProductPage } from "@/components/organisms/SingleProductPage";
 import { getProductById } from "@/service/product.service";
 import { ProductRecommendationList } from "@/components/molecules/ProductRecommendationList";
 import { LoadingIndicator } from "@/components/atoms/LoadingIndicator";
@@ -22,7 +22,7 @@ export default async function ProductPage({ params }: { params: { productId: str
 	if (!product) return null;
 	return (
 		<div>
-			<ProductItem product={product} />
+			<SingleProductPage product={product} />
 			<Suspense fallback={<LoadingIndicator />}>
 				<aside className="mt-12">
 					<ProductRecommendationList />

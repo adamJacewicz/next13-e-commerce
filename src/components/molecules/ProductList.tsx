@@ -6,6 +6,8 @@ type ProductListProps = {
 };
 
 export function ProductList({ products }: ProductListProps) {
+	if (!products) return null;
+
 	return (
 		<ul
 			data-testid="products-list"

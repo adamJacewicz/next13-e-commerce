@@ -23,7 +23,7 @@ export default async function CategoryPage({
 }) {
 	const page = Number(params.page);
 
-	const [{ products, count }, category] = await Promise.all([
+	const [{ products, pageInfo, count }, category] = await Promise.all([
 		getProductsListByCategory({
 			slug: params.category,
 			page,
@@ -37,7 +37,13 @@ export default async function CategoryPage({
 		<div className="flex flex-col">
 			<h2>{category.name}</h2>
 			<ProductList products={products} />
-			<Pagination pathName={`/categories/${params.category}`} page={page} total={count} />
+			<Pagination
+				hasNextPage={pageInfo.hasNextPage}
+				hasPreviousPage={pageInfo.hasPreviousPage}
+				basePath={`/categories/${params.category}`}
+				page={page}
+				total={count}
+			/>
 		</div>
 	);
 }

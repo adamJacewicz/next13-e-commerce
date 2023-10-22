@@ -12,27 +12,45 @@ export function formatMoney(value: number) {
 	}).format(value);
 }
 
-export async function executeGraphql<TResult, TVariables>(
-	query: TypedDocumentString<TResult, TVariables>,
-	...[variables]: TVariables extends Record<string, never> ? [] : [TVariables]
-): Promise<TResult> {
+export async function executeGraphql<TResult, TVariables>({
+	query,
+	variables,
+	headers,
+	next,
+	cache,
+}: {
+	query: TypedDocumentString<TResult, TVariables>;
+	cache?: RequestCache;
+	headers?: HeadersInit;
+	next?: NextFetchRequestConfig | undefined;
+} & (TVariables extends { [key: string]: never }
+	? { variables?: never }
+	: { variables: TVariables })): Promise<TResult> {
 	if (!process.env.GRAPHQL_URL) {
 		throw TypeError("GRAPHQL_URL is not defined");
+	}
+	if (!process.env.GRAPHQL_TOKEN) {
+		throw TypeError("GRAPHQL_TOKEN is not defined");
 	}
 	const response = await fetch(process.env.GRAPHQL_URL, {
 		method: "POST",
 		body: JSON.stringify({
-			query: query.toString(),
+			query,
 			variables,
 		}),
 		headers: {
+			...headers,
 			"Content-Type": "application/json",
+			Authorization: `Bearer ${process.env.GRAPHQL_TOKEN}`,
 		},
+		cache,
+		next,
 	});
 
 	const graphqlResponse = (await response.json()) as GraphQLResponse<TResult>;
 
 	if (graphqlResponse.errors) {
+		console.log(graphqlResponse.errors);
 		throw TypeError(`GraphQL Error`, {
 			cause: graphqlResponse.errors,
 		});

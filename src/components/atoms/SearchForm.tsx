@@ -1,7 +1,7 @@
 "use client";
 import { type FormEvent, type ChangeEvent } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Input } from "@/components/atoms/Input";
+import { InputText } from "@/components/atoms/InputText";
 import { useDebounce } from "@/hooks/useDebounce";
 
 export function SearchForm() {
@@ -23,7 +23,7 @@ export function SearchForm() {
 
 	return (
 		<form role="search" onSubmit={onSubmit}>
-			<Input
+			<InputText
 				onChange={debouncedOnChange}
 				type="search"
 				role="searchbox"

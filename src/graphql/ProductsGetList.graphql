@@ -1,8 +1,14 @@
-query ProductsGetList($skip: Int , $first: Int) {
-    products(skip: $skip, first: $first) {
-        ...ProductListItem
-    }
-    productsConnection {
+query ProductsGetList($first: Int, $skip: Int) {
+    productsConnection(first: $first, skip: $skip) {
+        products: edges {
+            node {
+                ...ProductListItem
+            }
+        }
+        pageInfo {
+            hasNextPage
+            hasPreviousPage
+        }
         aggregate {
             count
         }

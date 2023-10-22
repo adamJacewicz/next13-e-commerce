@@ -15,14 +15,21 @@ export async function generateStaticParams() {
 }
 export default async function ProductsPage({ params }: { params: ProductsPageParams }) {
 	const page = Number(params.page);
-	const { products, count } = await getProductList({
+	const { products, pageInfo, count } = await getProductList({
 		page: page,
 		perPage: PRODUCTS_PER_PAGE,
 	});
+
 	return (
 		<div className="flex flex-col">
 			<ProductList products={products} />
-			<Pagination pathName="/products" page={page} total={count} />
+			<Pagination
+				hasNextPage={pageInfo.hasNextPage}
+				hasPreviousPage={pageInfo.hasPreviousPage}
+				basePath="/products"
+				page={page}
+				total={count}
+			/>
 		</div>
 	);
 }

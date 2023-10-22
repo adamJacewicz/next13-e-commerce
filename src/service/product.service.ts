@@ -13,12 +13,19 @@ import { PRODUCTS_PER_PAGE } from "@/constants";
 export async function getProductList(options?: { page: number; perPage?: number }) {
 	if (!options) {
 		const {
-			products,
 			productsConnection: {
 				aggregate: { count },
+				products,
+				pageInfo,
 			},
-		} = await executeGraphql(ProductsGetListDocument, {});
-		return { products, count };
+		} = await executeGraphql({
+			query: ProductsGetListDocument,
+			variables: {},
+			next: {
+				revalidate: 60 * 60 * 24,
+			},
+		});
+		return { products: products.map(({ node }) => node), count, pageInfo };
 	}
 
 	const perPage = options?.perPage ?? PRODUCTS_PER_PAGE;
@@ -29,17 +36,30 @@ export async function getProductList(options?: { page: number; perPage?: number 
 	};
 
 	const {
-		products,
 		productsConnection: {
 			aggregate: { count },
+			products,
+			pageInfo,
 		},
-	} = await executeGraphql(ProductsGetListDocument, variables);
+	} = await executeGraphql({
+		variables,
+		query: ProductsGetListDocument,
+		next: {
+			revalidate: 60 * 60 * 24,
+		},
+	});
 
-	return { products, count };
+	return { products: products.map(({ node }) => node), count, pageInfo };
 }
 
 export async function getProductById(id: string) {
-	const { product } = await executeGraphql(ProductGetByIdDocument, { id });
+	const { product } = await executeGraphql({
+		variables: { id },
+		query: ProductGetByIdDocument,
+		next: {
+			revalidate: 60 * 60 * 24,
+		},
+	});
 	return product;
 }
 
@@ -53,17 +73,24 @@ export async function getProductsListByCategory({
 	perPage?: number;
 }) {
 	const {
-		products,
 		productsConnection: {
+			products,
+			pageInfo,
 			aggregate: { count },
 		},
-	} = await executeGraphql(ProductsGetByCategorySlugDocument, {
-		skip: (page - 1) * perPage,
-		first: perPage,
-		slug,
+	} = await executeGraphql({
+		query: ProductsGetByCategorySlugDocument,
+		variables: {
+			skip: (page - 1) * perPage,
+			first: perPage,
+			slug,
+		},
+		next: {
+			revalidate: 60 * 60 * 24,
+		},
 	});
 
-	return { products, count };
+	return { products: products.map(({ node }) => node), count, pageInfo };
 }
 
 export async function getProductsListByCollection({
@@ -76,30 +103,49 @@ export async function getProductsListByCollection({
 	perPage?: number;
 }) {
 	const {
-		products,
 		productsConnection: {
+			products,
+			pageInfo,
 			aggregate: { count },
 		},
-	} = await executeGraphql(ProductsGetByCollectionSlugDocument, {
-		skip: (page - 1) * perPage,
-		first: perPage,
-		slug,
+	} = await executeGraphql({
+		variables: {
+			skip: (page - 1) * perPage,
+			first: perPage,
+			slug,
+		},
+		query: ProductsGetByCollectionSlugDocument,
+		next: {
+			revalidate: 60 * 60 * 24,
+		},
 	});
 
-	return { products, count };
+	return { products: products.map(({ node }) => node), count, pageInfo };
 }
 
 // const wait = async (delay: number) => new Promise((resolve) => setTimeout(resolve, delay));
 
 export async function getRecommendationProducts() {
 	// await wait(2000);
-	const { products } = await executeGraphql(ProductsGetRecommendationListDocument);
+	const { products } = await executeGraphql({
+		query: ProductsGetRecommendationListDocument,
+		next: {
+			revalidate: 60 * 60 * 24,
+		},
+	});
 
 	return products;
 }
+
 export async function getProductsBySearchQuery(query: string) {
-	const { products } = await executeGraphql(ProductsGetListBySearchQueryDocument, {
-		query,
+	const { products } = await executeGraphql({
+		variables: {
+			query,
+		},
+		next: {
+			revalidate: 60 * 60 * 24,
+		},
+		query: ProductsGetListBySearchQueryDocument,
 	});
 
 	return products;
