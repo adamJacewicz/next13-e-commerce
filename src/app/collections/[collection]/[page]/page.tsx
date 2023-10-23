@@ -3,6 +3,7 @@ import { getProductsListByCollection } from "@/service/product.service";
 import { ProductList } from "@/components/molecules/ProductList";
 import { Pagination } from "@/components/molecules/Pagination";
 import { getCollectionBySlug } from "@/service/collections.service";
+import { PageHeader } from "@/components/atoms/PageHeader";
 
 export async function generateMetadata({
 	params,
@@ -34,8 +35,8 @@ export default async function CollectionPage({
 	return products.length === 0 ? (
 		<h2>No products</h2>
 	) : (
-		<div className="flex flex-col">
-			<h2>{collection.name}</h2>
+		<>
+			<PageHeader>{collection.name}</PageHeader>
 			<ProductList products={products} />
 			<Pagination
 				hasPreviousPage={pageInfo.hasPreviousPage}
@@ -44,6 +45,6 @@ export default async function CollectionPage({
 				page={page}
 				total={count}
 			/>
-		</div>
+		</>
 	);
 }

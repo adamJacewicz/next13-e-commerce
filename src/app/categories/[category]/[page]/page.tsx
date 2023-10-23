@@ -3,6 +3,7 @@ import { getProductsListByCategory } from "@/service/product.service";
 import { ProductList } from "@/components/molecules/ProductList";
 import { Pagination } from "@/components/molecules/Pagination";
 import { getCategoryBySlug } from "@/service/categories.service";
+import { PageHeader } from "@/components/atoms/PageHeader";
 
 export async function generateMetadata({
 	params,
@@ -30,12 +31,11 @@ export default async function CategoryPage({
 		}),
 		getCategoryBySlug(params.category),
 	]);
-
 	return products.length === 0 ? (
 		<h2>No products</h2>
 	) : (
-		<div className="flex flex-col">
-			<h2>{category.name}</h2>
+		<>
+			<PageHeader>{category.name}</PageHeader>
 			<ProductList products={products} />
 			<Pagination
 				hasNextPage={pageInfo.hasNextPage}
@@ -44,6 +44,6 @@ export default async function CategoryPage({
 				page={page}
 				total={count}
 			/>
-		</div>
+		</>
 	);
 }

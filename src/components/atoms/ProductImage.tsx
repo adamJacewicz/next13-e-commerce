@@ -18,7 +18,7 @@ export const ProductImage = ({
 				alt={alt}
 				width={width}
 				height={height}
-				className="h-full w-full object-cover object-center p-3"
+				className="h-full w-full object-cover object-center p-0.5 sm:p-3"
 			/>
 		</div>
 	);

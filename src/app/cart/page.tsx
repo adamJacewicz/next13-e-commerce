@@ -4,6 +4,7 @@ import { getCartFromCookies } from "@/service/cart.service";
 import { formatMoney } from "@/utils";
 import { ProductImage } from "@/components/atoms/ProductImage";
 import { RemoveButton } from "@/app/cart/RemoveButton";
+import { handlePaymentAction } from "@/app/cart/actions";
 
 export default async function CartPage() {
 	const cart = await getCartFromCookies();
@@ -14,13 +15,14 @@ export default async function CartPage() {
 		(acc, item) => acc + item.quantity * (item.product?.price ?? 0),
 		0,
 	);
+
 	return (
-		<section className="w-full">
+		<section className="mx-auto flex w-full max-w-3xl flex-col">
 			<ul>
 				{cart.orderItems.map(
 					(item) =>
 						item.product && (
-							<li className="my-4 flex items-center gap-10" key={item.id}>
+							<li className="my-2 flex items-center gap-6" key={item.id}>
 								<ProductImage
 									width={100}
 									height={100}
@@ -35,7 +37,18 @@ export default async function CartPage() {
 						),
 				)}
 			</ul>
-			<div>total: {total}</div>
+
+			<div className="flex items-center justify-between font-medium">
+				<span className="px-3 py-2">Total: {formatMoney(total / 100)}</span>
+				<form action={handlePaymentAction}>
+					<button
+						type="submit"
+						className="rounded-md border border-transparent bg-blue-600 px-3 py-2 font-medium text-white hover:bg-blue-700 disabled:bg-blue-300"
+					>
+						Pay
+					</button>
+				</form>
+			</div>
 		</section>
 	);
 }

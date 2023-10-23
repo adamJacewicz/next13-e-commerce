@@ -8,6 +8,9 @@
   --background-end-rgb: 255, 0, 0;
 }
 
+svg {
+  stroke-width: 1.5px;
+}
 
 body {
   color: rgb(var(--foreground-rgb));

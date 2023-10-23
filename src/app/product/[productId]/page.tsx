@@ -21,13 +21,13 @@ export default async function ProductPage({ params }: { params: { productId: str
 	const product = await getProductById(params.productId);
 	if (!product) return null;
 	return (
-		<div>
+		<>
 			<SingleProductPage product={product} />
 			<Suspense fallback={<LoadingIndicator />}>
 				<aside className="mt-12">
 					<ProductRecommendationList />
 				</aside>
 			</Suspense>
-		</div>
+		</>
 	);
 }

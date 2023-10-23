@@ -46,12 +46,14 @@ export async function Navbar() {
 					</ul>
 				</nav>
 				<Suspense>
-					<SearchForm />
-					<Link href="/cart" className="flex items-center">
-						<ShoppingCart aria-hidden="true" />
-						<span className="ml-2 text-sm font-medium">{quantity}</span>
-						<span className="sr-only">items in cart</span>
-					</Link>
+					<div className="flex items-center gap-3">
+						<SearchForm />
+						<Link href="/cart" className="flex items-center">
+							<ShoppingCart aria-hidden="true" />
+							<span className="ml-2 text-sm font-medium">{quantity}</span>
+							<span className="sr-only">items in cart</span>
+						</Link>
+					</div>
 				</Suspense>
 			</div>
 		</div>
