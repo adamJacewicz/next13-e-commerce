@@ -25,13 +25,15 @@ const documents = {
     "query CollectionsGetByCollectionSlug($slug: String!) {\n  collections(where: {slug: $slug}) {\n    id\n    name\n    slug\n  }\n}": types.CollectionsGetByCollectionSlugDocument,
     "query CollectionsGetList {\n  collections {\n    id\n    name\n    slug\n    description\n  }\n}": types.CollectionsGetListDocument,
     "query ProductGetById($id: ID!) {\n  product(where: {id: $id}) {\n    ...ProductListItem\n    ...ProductVariants\n  }\n}": types.ProductGetByIdDocument,
-    "fragment ProductListItem on Product {\n  price\n  name\n  description\n  id\n  images {\n    url\n  }\n  categories {\n    name\n    id\n  }\n}": types.ProductListItemFragmentDoc,
+    "fragment ProductListItem on Product {\n  price\n  name\n  description\n  id\n  averageRating\n  images {\n    url\n  }\n  categories {\n    description\n    name\n    id\n  }\n  collections {\n    description\n    name\n    id\n  }\n  reviews {\n    createdAt\n    rating\n    id\n    email\n    name\n    headline\n    content\n  }\n}": types.ProductListItemFragmentDoc,
+    "mutation ProductUpdateAverageRating($averageRating: Float!, $productId: ID!) {\n  updateProduct(data: {averageRating: $averageRating}, where: {id: $productId}) {\n    id\n    averageRating\n  }\n  publishProduct(to: PUBLISHED, where: {id: $productId}) {\n    id\n  }\n}": types.ProductUpdateAverageRatingDocument,
     "fragment ProductVariants on Product {\n  variants {\n    ... on ProductColorVariant {\n      id\n      name\n      color\n    }\n    ... on ProductSizeColorVariant {\n      id\n      name\n      color\n      size\n    }\n    ... on ProductSizeVariant {\n      id\n      name\n      size\n    }\n  }\n}": types.ProductVariantsFragmentDoc,
-    "query ProductsGetByCategorySlug($slug: String!, $skip: Int, $first: Int) {\n  productsConnection(\n    first: $first\n    skip: $skip\n    where: {categories_some: {slug: $slug}}\n  ) {\n    products: edges {\n      node {\n        price\n        name\n        description\n        id\n        images {\n          url\n        }\n        categories {\n          name\n          id\n        }\n      }\n    }\n    pageInfo {\n      hasNextPage\n      hasPreviousPage\n    }\n    aggregate {\n      count\n    }\n  }\n}": types.ProductsGetByCategorySlugDocument,
-    "query ProductsGetByCollectionSlug($slug: String!, $skip: Int, $first: Int) {\n  productsConnection(\n    first: $first\n    skip: $skip\n    where: {collections_some: {slug: $slug}}\n  ) {\n    products: edges {\n      node {\n        price\n        name\n        description\n        id\n        images {\n          url\n        }\n        categories {\n          name\n          id\n        }\n      }\n    }\n    pageInfo {\n      hasNextPage\n      hasPreviousPage\n    }\n    aggregate {\n      count\n    }\n  }\n}": types.ProductsGetByCollectionSlugDocument,
-    "query ProductsGetList($first: Int, $skip: Int) {\n  productsConnection(first: $first, skip: $skip) {\n    products: edges {\n      node {\n        ...ProductListItem\n      }\n    }\n    pageInfo {\n      hasNextPage\n      hasPreviousPage\n    }\n    aggregate {\n      count\n    }\n  }\n}": types.ProductsGetListDocument,
-    "query ProductsGetListBySearchQuery($skip: Int, $first: Int, $query: String) {\n  products(where: {_search: $query}, skip: $skip, first: $first) {\n    ...ProductListItem\n  }\n  productsConnection {\n    aggregate {\n      count\n    }\n  }\n}": types.ProductsGetListBySearchQueryDocument,
+    "query ProductsGetByCategorySlug($slug: String!, $skip: Int, $first: Int, $orderBy: ProductOrderByInput) {\n  productsConnection(\n    first: $first\n    skip: $skip\n    orderBy: $orderBy\n    where: {categories_some: {slug: $slug}}\n  ) {\n    products: edges {\n      node {\n        ...ProductListItem\n      }\n    }\n    pageInfo {\n      hasNextPage\n      hasPreviousPage\n    }\n    aggregate {\n      count\n    }\n  }\n}": types.ProductsGetByCategorySlugDocument,
+    "query ProductsGetByCollectionSlug($slug: String!, $skip: Int, $first: Int, $orderBy: ProductOrderByInput) {\n  productsConnection(\n    first: $first\n    skip: $skip\n    orderBy: $orderBy\n    where: {collections_some: {slug: $slug}}\n  ) {\n    products: edges {\n      node {\n        ...ProductListItem\n      }\n    }\n    pageInfo {\n      hasNextPage\n      hasPreviousPage\n    }\n    aggregate {\n      count\n    }\n  }\n}": types.ProductsGetByCollectionSlugDocument,
+    "query ProductsGetCount {\n  productsConnection {\n    aggregate {\n      count\n    }\n  }\n}": types.ProductsGetCountDocument,
+    "query ProductsGetList($first: Int, $skip: Int, $search: String, $orderBy: ProductOrderByInput) {\n  productsConnection(\n    first: $first\n    skip: $skip\n    orderBy: $orderBy\n    where: {_search: $search}\n  ) {\n    products: edges {\n      node {\n        ...ProductListItem\n      }\n    }\n    pageInfo {\n      hasNextPage\n      hasPreviousPage\n    }\n    aggregate {\n      count\n    }\n  }\n}": types.ProductsGetListDocument,
     "query ProductsGetRecommendationList {\n  products(\n    orderBy: publishedAt_ASC\n    where: {reviews_some: {rating_gte: 4}}\n    first: 4\n  ) {\n    ...ProductListItem\n  }\n}": types.ProductsGetRecommendationListDocument,
+    "mutation ReviewAddToProduct($review: ReviewCreateInput!, $productId: ID!) {\n  createReview(data: $review) {\n    id\n    product {\n      id\n      reviews {\n        rating\n      }\n    }\n  }\n  publishManyReviews(to: PUBLISHED, where: {product: {id: $productId}}) {\n    count\n  }\n}": types.ReviewAddToProductDocument,
 };
 
 /**
@@ -81,7 +83,11 @@ export function graphql(source: "query ProductGetById($id: ID!) {\n  product(whe
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "fragment ProductListItem on Product {\n  price\n  name\n  description\n  id\n  images {\n    url\n  }\n  categories {\n    name\n    id\n  }\n}"): typeof import('./graphql').ProductListItemFragmentDoc;
+export function graphql(source: "fragment ProductListItem on Product {\n  price\n  name\n  description\n  id\n  averageRating\n  images {\n    url\n  }\n  categories {\n    description\n    name\n    id\n  }\n  collections {\n    description\n    name\n    id\n  }\n  reviews {\n    createdAt\n    rating\n    id\n    email\n    name\n    headline\n    content\n  }\n}"): typeof import('./graphql').ProductListItemFragmentDoc;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "mutation ProductUpdateAverageRating($averageRating: Float!, $productId: ID!) {\n  updateProduct(data: {averageRating: $averageRating}, where: {id: $productId}) {\n    id\n    averageRating\n  }\n  publishProduct(to: PUBLISHED, where: {id: $productId}) {\n    id\n  }\n}"): typeof import('./graphql').ProductUpdateAverageRatingDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -89,23 +95,27 @@ export function graphql(source: "fragment ProductVariants on Product {\n  varian
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "query ProductsGetByCategorySlug($slug: String!, $skip: Int, $first: Int) {\n  productsConnection(\n    first: $first\n    skip: $skip\n    where: {categories_some: {slug: $slug}}\n  ) {\n    products: edges {\n      node {\n        price\n        name\n        description\n        id\n        images {\n          url\n        }\n        categories {\n          name\n          id\n        }\n      }\n    }\n    pageInfo {\n      hasNextPage\n      hasPreviousPage\n    }\n    aggregate {\n      count\n    }\n  }\n}"): typeof import('./graphql').ProductsGetByCategorySlugDocument;
+export function graphql(source: "query ProductsGetByCategorySlug($slug: String!, $skip: Int, $first: Int, $orderBy: ProductOrderByInput) {\n  productsConnection(\n    first: $first\n    skip: $skip\n    orderBy: $orderBy\n    where: {categories_some: {slug: $slug}}\n  ) {\n    products: edges {\n      node {\n        ...ProductListItem\n      }\n    }\n    pageInfo {\n      hasNextPage\n      hasPreviousPage\n    }\n    aggregate {\n      count\n    }\n  }\n}"): typeof import('./graphql').ProductsGetByCategorySlugDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "query ProductsGetByCollectionSlug($slug: String!, $skip: Int, $first: Int) {\n  productsConnection(\n    first: $first\n    skip: $skip\n    where: {collections_some: {slug: $slug}}\n  ) {\n    products: edges {\n      node {\n        price\n        name\n        description\n        id\n        images {\n          url\n        }\n        categories {\n          name\n          id\n        }\n      }\n    }\n    pageInfo {\n      hasNextPage\n      hasPreviousPage\n    }\n    aggregate {\n      count\n    }\n  }\n}"): typeof import('./graphql').ProductsGetByCollectionSlugDocument;
+export function graphql(source: "query ProductsGetByCollectionSlug($slug: String!, $skip: Int, $first: Int, $orderBy: ProductOrderByInput) {\n  productsConnection(\n    first: $first\n    skip: $skip\n    orderBy: $orderBy\n    where: {collections_some: {slug: $slug}}\n  ) {\n    products: edges {\n      node {\n        ...ProductListItem\n      }\n    }\n    pageInfo {\n      hasNextPage\n      hasPreviousPage\n    }\n    aggregate {\n      count\n    }\n  }\n}"): typeof import('./graphql').ProductsGetByCollectionSlugDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "query ProductsGetList($first: Int, $skip: Int) {\n  productsConnection(first: $first, skip: $skip) {\n    products: edges {\n      node {\n        ...ProductListItem\n      }\n    }\n    pageInfo {\n      hasNextPage\n      hasPreviousPage\n    }\n    aggregate {\n      count\n    }\n  }\n}"): typeof import('./graphql').ProductsGetListDocument;
+export function graphql(source: "query ProductsGetCount {\n  productsConnection {\n    aggregate {\n      count\n    }\n  }\n}"): typeof import('./graphql').ProductsGetCountDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "query ProductsGetListBySearchQuery($skip: Int, $first: Int, $query: String) {\n  products(where: {_search: $query}, skip: $skip, first: $first) {\n    ...ProductListItem\n  }\n  productsConnection {\n    aggregate {\n      count\n    }\n  }\n}"): typeof import('./graphql').ProductsGetListBySearchQueryDocument;
+export function graphql(source: "query ProductsGetList($first: Int, $skip: Int, $search: String, $orderBy: ProductOrderByInput) {\n  productsConnection(\n    first: $first\n    skip: $skip\n    orderBy: $orderBy\n    where: {_search: $search}\n  ) {\n    products: edges {\n      node {\n        ...ProductListItem\n      }\n    }\n    pageInfo {\n      hasNextPage\n      hasPreviousPage\n    }\n    aggregate {\n      count\n    }\n  }\n}"): typeof import('./graphql').ProductsGetListDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "query ProductsGetRecommendationList {\n  products(\n    orderBy: publishedAt_ASC\n    where: {reviews_some: {rating_gte: 4}}\n    first: 4\n  ) {\n    ...ProductListItem\n  }\n}"): typeof import('./graphql').ProductsGetRecommendationListDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "mutation ReviewAddToProduct($review: ReviewCreateInput!, $productId: ID!) {\n  createReview(data: $review) {\n    id\n    product {\n      id\n      reviews {\n        rating\n      }\n    }\n  }\n  publishManyReviews(to: PUBLISHED, where: {product: {id: $productId}}) {\n    count\n  }\n}"): typeof import('./graphql').ReviewAddToProductDocument;
 
 
 export function graphql(source: string) {

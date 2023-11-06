@@ -3,11 +3,27 @@ fragment ProductListItem on Product {
     name
     description
     id
+    averageRating
     images {
         url
     }
     categories {
+        description
         name
         id
+    }
+    collections {
+        description
+        name
+        id
+    }
+    reviews {
+        createdAt
+        rating
+        id
+        email
+        name
+        headline
+        content
     }
 }

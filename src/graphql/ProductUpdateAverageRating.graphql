@@ -1,0 +1,11 @@
+mutation ProductUpdateAverageRating($averageRating: Float!, $productId: ID!) {
+	updateProduct(data: {averageRating: $averageRating}, where: {id: $productId}) {
+		id
+		averageRating
+	}
+	publishProduct(to: PUBLISHED, where:{id: $productId}) {
+		id
+	}
+}
+
+

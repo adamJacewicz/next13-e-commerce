@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { type Route } from "next";
 import { ShoppingCart } from "lucide-react";
 import { ActiveLink } from "@/components/atoms/ActiveLink";
-import { navLinks } from "@/constants";
+import { NAV_LINKS } from "@/constants";
 import { SearchForm } from "@/components/atoms/SearchForm";
 import { getCategoryList } from "@/service/categories.service";
 import { type NavLink } from "@/types/types";
@@ -31,7 +31,7 @@ export async function Navbar() {
 
 				<nav>
 					<ul className="flex items-center gap-3">
-						{[...navLinks, ...categoryLinks].map((link) => (
+						{[...NAV_LINKS, ...categoryLinks].map((link) => (
 							<li key={link.href}>
 								<ActiveLink
 									activeClassName="text-blue-600 border-b-blue-600"
@@ -48,7 +48,7 @@ export async function Navbar() {
 				<Suspense>
 					<div className="flex items-center gap-3">
 						<SearchForm />
-						<Link href="/cart" className="flex items-center">
+						<Link href="/cart/sidebar" className="flex items-center">
 							<ShoppingCart aria-hidden="true" />
 							<span className="ml-2 text-sm font-medium">{quantity}</span>
 							<span className="sr-only">items in cart</span>

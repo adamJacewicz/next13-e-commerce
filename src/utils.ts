@@ -12,6 +12,10 @@ export function formatMoney(value: number) {
 	}).format(value);
 }
 
+export function average(nums: number[]) {
+	return nums.reduce((acc, val) => acc + val, 0) / nums.length;
+}
+
 export async function executeGraphql<TResult, TVariables>({
 	query,
 	variables,

@@ -3,7 +3,7 @@ import Stripe from "stripe";
 export default async function CartSuccess({
 	searchParams,
 }: {
-	searchParams: { session_id: string };
+	searchParams: { sessionId: string };
 }) {
 	if (!process.env.STRIPE_SECRET_KEY) {
 		return null;
@@ -14,7 +14,7 @@ export default async function CartSuccess({
 		typescript: true,
 	});
 
-	const checkoutSession = await stripe.checkout.sessions.retrieve(searchParams.session_id);
+	const checkoutSession = await stripe.checkout.sessions.retrieve(searchParams.sessionId);
 
 	// if (checkoutSession.metadata?.cartId) {
 	// 	await addStripeCheckoutId(

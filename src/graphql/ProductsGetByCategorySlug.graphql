@@ -1,18 +1,8 @@
-query ProductsGetByCategorySlug($slug: String!, $skip: Int, $first: Int) {
-    productsConnection(first: $first, skip: $skip, where: { categories_some: { slug: $slug } }) {
+query ProductsGetByCategorySlug($slug: String!, $skip: Int, $first: Int,  $orderBy: ProductOrderByInput) {
+    productsConnection(first: $first, skip: $skip, orderBy: $orderBy, where: { categories_some: { slug: $slug } }) {
         products: edges {
             node {
-                price
-                name
-                description
-                id
-                images {
-                    url
-                }
-                categories {
-                    name
-                    id
-                }
+                ...ProductListItem
             }
         }
         pageInfo {

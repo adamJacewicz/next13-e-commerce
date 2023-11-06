@@ -4,6 +4,13 @@ import { ProductList } from "@/components/molecules/ProductList";
 import { Pagination } from "@/components/molecules/Pagination";
 import { getCategoryBySlug } from "@/service/categories.service";
 import { PageHeader } from "@/components/atoms/PageHeader";
+import { type ProductOrderByInput } from "@/gql/graphql";
+import { SortSelect } from "@/components/molecules/SortSelect";
+
+type CategoryPageProps = {
+	params: { category: string; page: string };
+	searchParams: { order: ProductOrderByInput };
+};
 
 export async function generateMetadata({
 	params,
@@ -17,17 +24,15 @@ export async function generateMetadata({
 	};
 }
 
-export default async function CategoryPage({
-	params,
-}: {
-	params: { category: string; page: string };
-}) {
+export default async function CategoryPage({ params, searchParams }: CategoryPageProps) {
 	const page = Number(params.page);
+	const { order } = searchParams;
 
 	const [{ products, pageInfo, count }, category] = await Promise.all([
 		getProductsListByCategory({
 			slug: params.category,
 			page,
+			order,
 		}),
 		getCategoryBySlug(params.category),
 	]);
@@ -35,7 +40,10 @@ export default async function CategoryPage({
 		<h2>No products</h2>
 	) : (
 		<>
-			<PageHeader>{category.name}</PageHeader>
+			<header className="flex items-center justify-between">
+				<PageHeader>{category.name}</PageHeader>
+				<SortSelect />
+			</header>
 			<ProductList products={products} />
 			<Pagination
 				hasNextPage={pageInfo.hasNextPage}

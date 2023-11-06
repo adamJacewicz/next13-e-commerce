@@ -1,5 +1,5 @@
-query ProductsGetList($first: Int, $skip: Int) {
-    productsConnection(first: $first, skip: $skip) {
+query ProductsGetList($first: Int, $skip: Int, $search: String, $orderBy: ProductOrderByInput) {
+    productsConnection(first: $first, skip: $skip, orderBy: $orderBy, where: {_search: $search}) {
         products: edges {
             node {
                 ...ProductListItem

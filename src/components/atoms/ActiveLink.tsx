@@ -1,7 +1,7 @@
 "use client";
 import { twMerge } from "tailwind-merge";
 import Link, { type LinkProps } from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import type { Route } from "next";
 
 interface ActiveLinkProps<T extends string> extends LinkProps<T> {
@@ -19,7 +19,12 @@ export function ActiveLink<T extends string>({
 	...rest
 }: ActiveLinkProps<T>) {
 	const pathName = usePathname();
-	const isActive = !!exact ? href === pathName : pathName.startsWith(href);
+	const searchParams = useSearchParams();
+	let path = pathName;
+	if (searchParams.size) {
+		path = `${path}?${searchParams.toString()}`;
+	}
+	const isActive = !!exact ? href === path : path.startsWith(href);
 
 	return (
 		<Link

@@ -1,39 +1,47 @@
 import { executeGraphql } from "@/utils";
 import {
 	ProductGetByIdDocument,
+	type ProductOrderByInput,
 	ProductsGetByCategorySlugDocument,
 	ProductsGetByCollectionSlugDocument,
-	ProductsGetListBySearchQueryDocument,
+	ProductsGetCountDocument,
 	ProductsGetListDocument,
 	type ProductsGetListQueryVariables,
 	ProductsGetRecommendationListDocument,
 } from "@/gql/graphql";
-import { PRODUCTS_PER_PAGE } from "@/constants";
+import { ORDER_OPTIONS, PRODUCTS_PER_PAGE } from "@/constants";
 
-export async function getProductList(options?: { page: number; perPage?: number }) {
-	if (!options) {
-		const {
-			productsConnection: {
-				aggregate: { count },
-				products,
-				pageInfo,
-			},
-		} = await executeGraphql({
-			query: ProductsGetListDocument,
-			variables: {},
-			next: {
-				revalidate: 60 * 60 * 24,
-			},
-		});
-		return { products: products.map(({ node }) => node), count, pageInfo };
+export async function getProductList(options?: {
+	page: number;
+	perPage?: number;
+	search?: string;
+	order?: ProductOrderByInput;
+}) {
+	let variables: ProductsGetListQueryVariables = { search: "" };
+	// if (!options) {
+	//
+	// 	const {
+	// 		productsConnection: {
+	// 			aggregate: { count },
+	// 			products,
+	// 			pageInfo,
+	// 		},
+	// 	} = await executeGraphql({
+	// 		query: ProductsGetListDocument,
+	// 		variables: {},
+	// 	});
+	// 	return { products: products.map(({ node }) => node), count, pageInfo };
+	// }
+
+	if (options) {
+		const perPage = options?.perPage ?? PRODUCTS_PER_PAGE;
+		variables = {
+			orderBy: options?.order ?? ORDER_OPTIONS[0].value,
+			search: options?.search ?? "",
+			skip: (options.page - 1) * perPage,
+			first: perPage,
+		};
 	}
-
-	const perPage = options?.perPage ?? PRODUCTS_PER_PAGE;
-
-	const variables: ProductsGetListQueryVariables = {
-		skip: (options.page - 1) * perPage,
-		first: perPage,
-	};
 
 	const {
 		productsConnection: {
@@ -42,11 +50,8 @@ export async function getProductList(options?: { page: number; perPage?: number 
 			pageInfo,
 		},
 	} = await executeGraphql({
-		variables,
+		variables: variables,
 		query: ProductsGetListDocument,
-		next: {
-			revalidate: 60 * 60 * 24,
-		},
 	});
 
 	return { products: products.map(({ node }) => node), count, pageInfo };
@@ -67,10 +72,12 @@ export async function getProductsListByCategory({
 	slug,
 	page,
 	perPage = PRODUCTS_PER_PAGE,
+	order,
 }: {
 	slug: string;
 	page: number;
 	perPage?: number;
+	order: ProductOrderByInput;
 }) {
 	const {
 		productsConnection: {
@@ -81,6 +88,7 @@ export async function getProductsListByCategory({
 	} = await executeGraphql({
 		query: ProductsGetByCategorySlugDocument,
 		variables: {
+			orderBy: order,
 			skip: (page - 1) * perPage,
 			first: perPage,
 			slug,
@@ -96,9 +104,11 @@ export async function getProductsListByCategory({
 export async function getProductsListByCollection({
 	slug,
 	page,
+	order,
 	perPage = PRODUCTS_PER_PAGE,
 }: {
 	slug: string;
+	order: ProductOrderByInput;
 	page: number;
 	perPage?: number;
 }) {
@@ -110,14 +120,12 @@ export async function getProductsListByCollection({
 		},
 	} = await executeGraphql({
 		variables: {
+			orderBy: order,
 			skip: (page - 1) * perPage,
 			first: perPage,
 			slug,
 		},
 		query: ProductsGetByCollectionSlugDocument,
-		next: {
-			revalidate: 60 * 60 * 24,
-		},
 	});
 
 	return { products: products.map(({ node }) => node), count, pageInfo };
@@ -129,24 +137,32 @@ export async function getRecommendationProducts() {
 	// await wait(2000);
 	const { products } = await executeGraphql({
 		query: ProductsGetRecommendationListDocument,
-		next: {
-			revalidate: 60 * 60 * 24,
-		},
 	});
 
 	return products;
 }
 
-export async function getProductsBySearchQuery(query: string) {
-	const { products } = await executeGraphql({
+export async function getProductsBySearchQuery(search: string) {
+	const {
+		productsConnection: { products },
+	} = await executeGraphql({
 		variables: {
-			query,
+			search,
 		},
-		next: {
-			revalidate: 60 * 60 * 24,
-		},
-		query: ProductsGetListBySearchQueryDocument,
+		query: ProductsGetListDocument,
 	});
 
-	return products;
+	return products.map(({ node }) => node);
+}
+
+export async function getProductsCount() {
+	const {
+		productsConnection: {
+			aggregate: { count },
+		},
+	} = await executeGraphql({
+		query: ProductsGetCountDocument,
+	});
+
+	return count;
 }

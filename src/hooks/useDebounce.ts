@@ -8,12 +8,19 @@ export const useDebounce = (callback: (...props: never[]) => void, delay: number
 		latestCallback.current = callback;
 	}, [callback]);
 
-	return (...props: Parameters<typeof callback>) => {
+	const stop = () => {
 		if (latestTimeout.current) {
 			clearTimeout(latestTimeout.current);
 		}
-		latestTimeout.current = setTimeout(() => {
-			latestCallback.current?.(...props);
-		}, delay);
 	};
+
+	return [
+		(...props: Parameters<typeof callback>) => {
+			stop();
+			latestTimeout.current = setTimeout(() => {
+				latestCallback.current?.(...props);
+			}, delay);
+		},
+		stop,
+	];
 };
