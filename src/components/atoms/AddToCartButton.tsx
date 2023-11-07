@@ -1,7 +1,10 @@
 "use client";
-import { experimental_useFormStatus as useFormStatus } from "react-dom";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+import { useFormStatus } from "react-dom";
 
 export function AddToCartButton() {
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
 	const formStatus = useFormStatus();
 
 	return (
