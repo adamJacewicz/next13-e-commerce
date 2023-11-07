@@ -5,7 +5,8 @@ import { RatingStar } from "@/components/atoms/RatingStar";
 
 const inputs = Array.from({ length: 5 }, (_, i) => Math.abs(5 - i));
 
-export const InputRating = forwardRef((props, ref) => {
+// eslint-disable-next-line react/display-name
+export const InputRating = forwardRef<{ reset: () => void }, {}>((_, ref) => {
 	const [value, setValue] = useState(1);
 	useImperativeHandle(
 		ref,
@@ -19,7 +20,7 @@ export const InputRating = forwardRef((props, ref) => {
 		[],
 	);
 	return (
-		<div ref={ref} className="stars-rating dir-rtl flex max-w-max items-center">
+		<div className="stars-rating dir-rtl flex max-w-max items-center">
 			{inputs.map((inputValue) => (
 				<label
 					key={inputValue}

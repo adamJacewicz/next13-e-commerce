@@ -48,7 +48,7 @@ export async function Navbar() {
 				<Suspense>
 					<div className="flex items-center gap-3">
 						<SearchForm />
-						<Link href="/cart/sidebar" className="flex items-center">
+						<Link href={`/cart/sidebar` as Route} className="flex items-center">
 							<ShoppingCart aria-hidden="true" />
 							<span className="ml-2 text-sm font-medium">{quantity}</span>
 							<span className="sr-only">items in cart</span>

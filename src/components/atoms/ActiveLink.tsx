@@ -18,13 +18,12 @@ export function ActiveLink<T extends string>({
 	exact = true,
 	...rest
 }: ActiveLinkProps<T>) {
-	const pathName = usePathname();
+	let pathName = usePathname();
 	const searchParams = useSearchParams();
-	let path = pathName;
 	if (searchParams.size) {
-		path = `${path}?${searchParams.toString()}`;
+		pathName = `${pathName}?${searchParams.toString()}`;
 	}
-	const isActive = !!exact ? href === path : path.startsWith(href);
+	const isActive = !!exact ? href === pathName : pathName.startsWith(href);
 
 	return (
 		<Link

@@ -36,6 +36,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
 		}),
 		getCategoryBySlug(params.category),
 	]);
+
 	return products.length === 0 ? (
 		<h2>No products</h2>
 	) : (

@@ -26,15 +26,15 @@ export async function generateMetadata({
 
 export default async function CollectionPage({ params, searchParams }: CollectionPageProps) {
 	const page = Number(params.page);
-	const { order } = searchParams;
 	const [{ products, pageInfo, count }, collection] = await Promise.all([
 		getProductsListByCollection({
 			slug: params.collection,
 			page,
-			order,
+			order: searchParams.order,
 		}),
 		getCollectionBySlug(params.collection),
 	]);
+
 	return products.length === 0 ? (
 		<h2>No products</h2>
 	) : (
@@ -45,9 +45,9 @@ export default async function CollectionPage({ params, searchParams }: Collectio
 			</header>
 			<ProductList products={products} />
 			<Pagination
+				basePath={`/collections/${params.collection}`}
 				hasPreviousPage={pageInfo.hasPreviousPage}
 				hasNextPage={pageInfo.hasNextPage}
-				basePath={`/collections/${params.collection}`}
 				page={page}
 				total={count}
 			/>

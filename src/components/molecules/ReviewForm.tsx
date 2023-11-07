@@ -1,5 +1,5 @@
 "use client";
-import { experimental_useOptimistic as useOptimistic, useRef } from "react";
+import { useOptimistic, useRef } from "react";
 import { InputRating } from "../atoms/InputRating";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
