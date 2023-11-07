@@ -9,6 +9,7 @@ export function AddToCartButton() {
 
 	return (
 		<button
+			{/* eslint-disable-next-line @typescript-eslint/no-unsafe-member-access */}
 			disabled={formStatus.pending}
 			type="submit"
 			data-testid="add-to-cart-button"
