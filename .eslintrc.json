@@ -83,11 +83,19 @@
 				"allowNumber": true,
 				"allowBoolean": true
 			}
+		],
+		"@typescript-eslint/no-misused-promises": [
+			"error",
+			{
+				"checksVoidReturn": {
+					"attributes": false
+				}
+			}
 		]
 	},
 	"overrides": [
 		{
-			"files": ["src/app/**/*.ts?(x)", "./tailwind.config.ts"],
+			"files": ["src/app/**/*.ts?(x)", "./tailwind.config.ts", "./src/middleware.ts"],
 			"rules": {
 				"import/no-default-export": "off"
 			}

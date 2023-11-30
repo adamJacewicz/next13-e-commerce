@@ -1,8 +1,12 @@
 import type { CodegenConfig } from "@graphql-codegen/cli";
+import { loadEnvConfig } from "@next/env";
+
+loadEnvConfig(process.cwd());
+
 
 const config: CodegenConfig = {
 	overwrite: true,
-	schema: "https://api-eu-central-1-shared-euc1-02.hygraph.com/v2/clihaom3j03ep01te1dg24yp5/master",
+	schema: process.env.GRAPHQL_URL,
 	documents: "src/graphql/*.graphql",
 	ignoreNoDocuments: true,
 	generates: {

@@ -1,0 +1,14 @@
+mutation ReviewAddToProduct($review: ReviewCreateInput!, $productId: ID!){
+    createReview(data: $review){
+        id
+        product{
+            id
+            reviews {
+                rating
+            }
+        }
+    }
+    publishManyReviews(to: PUBLISHED, where: {product: {id: $productId}}) {
+        count
+    }
+}

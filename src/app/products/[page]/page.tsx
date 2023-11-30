@@ -1,28 +1,46 @@
-import { getProductList } from "@/service/product.service";
-import { PRODUCTS_PER_PAGE } from "@/constants";
+import { getProductList, getProductsCount } from "@/service/product.service";
 import { ProductList } from "@/components/molecules/ProductList";
 import { Pagination } from "@/components/molecules/Pagination";
+import { PageHeader } from "@/components/atoms/PageHeader";
+import { type ProductOrderByInput } from "@/gql/graphql";
+import { SortSelect } from "@/components/molecules/SortSelect";
+import { PRODUCTS_PER_PAGE } from "@/constants";
 
-type ProductsPageParams = {
-	page: string;
+type ProductsPageProps = {
+	params: {
+		page: string;
+	};
+	searchParams: {
+		order: ProductOrderByInput;
+	};
 };
-
 export async function generateStaticParams() {
-	const { count } = await getProductList();
+	const count = await getProductsCount();
 	return Array.from({ length: Math.ceil(count / PRODUCTS_PER_PAGE) }, (_, i) => ({
 		page: `${i + 1}`,
 	}));
 }
-export default async function ProductsPage({ params }: { params: ProductsPageParams }) {
+export default async function ProductsPage({ params, searchParams }: ProductsPageProps) {
 	const page = Number(params.page);
-	const { products, count } = await getProductList({
-		page: page,
-		perPage: PRODUCTS_PER_PAGE,
+	const { order } = searchParams;
+	const { products, pageInfo, count } = await getProductList({
+		page,
+		order,
 	});
 	return (
-		<div className="flex flex-col">
+		<>
+			<header className="flex items-center justify-between">
+				<PageHeader>All products</PageHeader>
+				<SortSelect />
+			</header>
 			<ProductList products={products} />
-			<Pagination pathName="/products" page={page} total={count} />
-		</div>
+			<Pagination
+				basePath={`/products`}
+				hasNextPage={pageInfo.hasNextPage}
+				hasPreviousPage={pageInfo.hasPreviousPage}
+				page={page}
+				total={count}
+			/>
+		</>
 	);
 }

@@ -3,6 +3,14 @@ import { getProductsListByCategory } from "@/service/product.service";
 import { ProductList } from "@/components/molecules/ProductList";
 import { Pagination } from "@/components/molecules/Pagination";
 import { getCategoryBySlug } from "@/service/categories.service";
+import { PageHeader } from "@/components/atoms/PageHeader";
+import { type ProductOrderByInput } from "@/gql/graphql";
+import { SortSelect } from "@/components/molecules/SortSelect";
+
+type CategoryPageProps = {
+	params: { category: string; page: string };
+	searchParams: { order: ProductOrderByInput };
+};
 
 export async function generateMetadata({
 	params,
@@ -16,17 +24,15 @@ export async function generateMetadata({
 	};
 }
 
-export default async function CategoryPage({
-	params,
-}: {
-	params: { category: string; page: string };
-}) {
+export default async function CategoryPage({ params, searchParams }: CategoryPageProps) {
 	const page = Number(params.page);
+	const { order } = searchParams;
 
-	const [{ products, count }, category] = await Promise.all([
+	const [{ products, pageInfo, count }, category] = await Promise.all([
 		getProductsListByCategory({
 			slug: params.category,
 			page,
+			order,
 		}),
 		getCategoryBySlug(params.category),
 	]);
@@ -34,10 +40,19 @@ export default async function CategoryPage({
 	return products.length === 0 ? (
 		<h2>No products</h2>
 	) : (
-		<div className="flex flex-col">
-			<h2>{category.name}</h2>
+		<>
+			<header className="flex items-center justify-between">
+				<PageHeader>{category.name}</PageHeader>
+				<SortSelect />
+			</header>
 			<ProductList products={products} />
-			<Pagination pathName={`/categories/${params.category}`} page={page} total={count} />
-		</div>
+			<Pagination
+				hasNextPage={pageInfo.hasNextPage}
+				hasPreviousPage={pageInfo.hasPreviousPage}
+				basePath={`/categories/${params.category}`}
+				page={page}
+				total={count}
+			/>
+		</>
 	);
 }

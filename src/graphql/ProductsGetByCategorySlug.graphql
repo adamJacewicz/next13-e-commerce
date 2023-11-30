@@ -1,8 +1,14 @@
-query ProductsGetByCategorySlug($slug: String!, $skip: Int, $first: Int) {
-    products(first: $first, where: { categories_some: { slug: $slug } }, skip: $skip) {
-        ...ProductListItem
-    }
-    productsConnection(where: {categories_some: {slug: $slug}}) {
+query ProductsGetByCategorySlug($slug: String!, $skip: Int, $first: Int,  $orderBy: ProductOrderByInput) {
+    productsConnection(first: $first, skip: $skip, orderBy: $orderBy, where: { categories_some: { slug: $slug } }) {
+        products: edges {
+            node {
+                ...ProductListItem
+            }
+        }
+        pageInfo {
+            hasNextPage
+            hasPreviousPage
+        }
         aggregate {
             count
         }

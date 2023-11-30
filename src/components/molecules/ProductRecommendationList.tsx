@@ -5,7 +5,7 @@ export async function ProductRecommendationList() {
 	const recommendationProducts = await getRecommendationProducts();
 	if (!recommendationProducts) return null;
 	return (
-		<div data-testid="related-products">
+		<div className="p-4" data-testid="related-products">
 			<h2 className="mx-auto mb-6 whitespace-nowrap text-center text-xl font-medium sm:text-xl md:text-2xl">
 				Recommendations
 			</h2>

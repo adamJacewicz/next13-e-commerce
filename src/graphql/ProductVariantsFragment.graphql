@@ -1,20 +1,41 @@
-fragment ProductVariants on Product {
-    variants {
-        ... on ProductColorVariant {
-            id
-            name
-            color
-        }
-        ... on ProductSizeColorVariant {
-            id
-            name
-            color
-            size
-        }
-        ... on ProductSizeVariant {
-            id
-            name
-            size
-        }
-    }
-}
+#fragment ProductVariants on Product {
+#    variants {
+#        ...SizeVariant
+#        ...ColorVariant
+#    }
+#}
+#
+#fragment ColorVariant on ProductColorVariant {
+#    __typename
+#    id
+#    name
+#    color {
+#        css
+#    }
+#    variantQuantities {
+#        quantity
+#        productSizeVariant {
+#            id
+#            name
+#            size
+#            id
+#        }
+#    }
+#}
+#
+#fragment SizeVariant on ProductSizeVariant {
+#    __typename
+#    id
+#    name
+#    size
+#    variantQuantities {
+#        quantity
+#        productColorVariant {
+#            id
+#            name
+#            color {
+#                css
+#            }
+#        }
+#    }
+#}

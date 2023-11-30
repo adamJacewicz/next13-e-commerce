@@ -9,6 +9,7 @@ type SearchPageProps = {
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
 	const query = searchParams.query ?? "";
+
 	const products = await getProductsBySearchQuery(query);
 	return (
 		<div>
