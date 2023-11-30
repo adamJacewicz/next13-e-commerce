@@ -18,7 +18,6 @@ export async function Navbar() {
 		label: category.name,
 		href: `/categories/${category.slug}` as Route,
 	}));
-
 	return (
 		<div className="mx-auto flex max-w-screen-2xl items-center justify-between">
 			<nav>
