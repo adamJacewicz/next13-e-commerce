@@ -5,13 +5,20 @@ import Stripe from "stripe";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { CartRemoveProductDocument, CartSetProductQuantityDocument } from "@/gql/graphql";
-import { executeGraphql } from "@/utils";
+import { executeGraphql } from "@/lib/utils";
 import { getCartFromCookies } from "@/service/cart.service";
 
-export async function changeItemQuantity(itemId: string, quantity: number) {
-	if (quantity <= 0) return;
+export async function changeItemQuantity({
+	itemId,
+	quantity,
+	total,
+}: {
+	itemId: string;
+	quantity: number;
+	total: number;
+}) {
 	await executeGraphql({
-		variables: { quantity, itemId },
+		variables: { quantity, itemId, total },
 		query: CartSetProductQuantityDocument,
 	});
 	revalidateTag("cart");

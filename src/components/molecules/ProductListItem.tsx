@@ -9,9 +9,9 @@ type ProductListItemProps = {
 
 export const ProductListItem = ({ product }: ProductListItemProps) => {
 	return (
-		<Link className="p-3" href={`/product/${product.id}`}>
+		<Link className="p-3" href={`/product/${product.slug}`}>
 			<article>
-				<ProductImage src={product.images[0].url} alt={product.name} />
+				<ProductImage src={product.images[0]?.url} alt={product.name} />
 				<ProductListItemHead product={product} />
 			</article>
 		</Link>

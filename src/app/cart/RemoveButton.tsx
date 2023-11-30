@@ -1,16 +1,18 @@
 "use client";
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { X } from "lucide-react";
+import { Trash } from "lucide-react";
 import { removeItem } from "@/app/cart/actions";
+import { Button } from "@/components/ui/button";
 
 export function RemoveButton({ itemId }: { itemId: string }) {
 	const [isPending, startTransition] = useTransition();
 	const router = useRouter();
 	return (
-		<button
+		<Button
+			size="icon"
+			variant="destructive"
 			disabled={isPending}
-			className="rounded-md border border-transparent bg-blue-600 p-1 font-medium text-white hover:bg-blue-700 disabled:bg-blue-300"
 			onClick={() => {
 				startTransition(async () => {
 					await removeItem(itemId);
@@ -18,7 +20,7 @@ export function RemoveButton({ itemId }: { itemId: string }) {
 				});
 			}}
 		>
-			<X width={18} height={18} />
-		</button>
+			<Trash width={16} height={16} />
+		</Button>
 	);
 }

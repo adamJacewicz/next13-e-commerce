@@ -1,4 +1,4 @@
-import { formatMoney } from "@/utils";
+import { formatMoney } from "@/lib/utils";
 import { type ProductListItemFragment } from "@/gql/graphql";
 import { Rating } from "@/components/molecules/Rating";
 

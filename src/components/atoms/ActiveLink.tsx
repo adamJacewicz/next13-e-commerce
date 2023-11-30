@@ -1,8 +1,8 @@
 "use client";
-import { twMerge } from "tailwind-merge";
 import Link, { type LinkProps } from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import type { Route } from "next";
+import { cn } from "@/lib/utils";
 
 interface ActiveLinkProps<T extends string> extends LinkProps<T> {
 	activeClassName: string;
@@ -29,7 +29,7 @@ export function ActiveLink<T extends string>({
 		<Link
 			aria-current={isActive ? "page" : undefined}
 			href={href}
-			className={twMerge(className, isActive && activeClassName)}
+			className={cn(className, isActive && activeClassName)}
 			{...rest}
 		>
 			{children}

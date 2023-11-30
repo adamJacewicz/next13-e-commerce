@@ -4,24 +4,25 @@ const nextConfig = {
 		typedRoutes: true,
 	},
 	images: {
-		domains: ["media.graphassets.com"],
+		remotePatterns: [{ hostname: "media.graphassets.com" }, { hostname: "img.clerk.com" }],
+		// domains: ["media.graphassets.com", "img.clerk.com"],
 	},
 	redirects: async () => {
 		return [
 			{
 				source: "/products",
 				destination: "/products/1",
-				permanent: true,
+				permanent: false,
 			},
 			{
 				source: "/categories/:slug",
 				destination: "/categories/:slug/1",
-				permanent: true,
+				permanent: false,
 			},
 			{
 				source: "/collections/:slug",
 				destination: "/collections/:slug/1",
-				permanent: true,
+				permanent: false,
 			},
 		];
 	},

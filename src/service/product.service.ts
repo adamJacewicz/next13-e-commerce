@@ -1,6 +1,7 @@
-import { executeGraphql } from "@/utils";
+import { executeGraphql } from "@/lib/utils";
 import {
 	ProductGetByIdDocument,
+	ProductGetBySlugDocument,
 	type ProductOrderByInput,
 	ProductsGetByCategorySlugDocument,
 	ProductsGetByCollectionSlugDocument,
@@ -66,6 +67,17 @@ export async function getProductById(id: string) {
 		},
 	});
 	return product;
+}
+
+export async function getProductBySlug(slug: string) {
+	const { products } = await executeGraphql({
+		variables: { slug },
+		query: ProductGetBySlugDocument,
+		next: {
+			revalidate: 60 * 60 * 24,
+		},
+	});
+	return products[0];
 }
 
 export async function getProductsListByCategory({

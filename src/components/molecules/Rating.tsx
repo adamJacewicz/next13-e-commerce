@@ -7,6 +7,7 @@ type RatingProps = {
 const stars = Array.from({ length: 5 }, (_, i) => i);
 
 export function Rating({ rating }: RatingProps) {
+	if (!rating) return null;
 	return (
 		<div className="flex items-center gap-2">
 			<div className="text-xs">

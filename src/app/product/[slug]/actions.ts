@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { type Review } from "@/types/types";
-import { average, executeGraphql } from "@/utils";
+import { average, executeGraphql } from "@/lib/utils";
 import { ProductUpdateAverageRatingDocument, ReviewAddToProductDocument } from "@/gql/graphql";
 
 export async function addReviewAction({

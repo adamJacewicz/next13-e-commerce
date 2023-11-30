@@ -1,16 +1,14 @@
-import Image from "next/image";
 import { Overlay } from "@/components/atoms/Overlay";
-
-import { formatMoney } from "@/utils";
+import { formatMoney } from "@/lib/utils";
 import { getCartFromCookies } from "@/service/cart.service";
+import { CartProduct } from "@/components/molecules/CartProduct";
 
 export default async function ModalCart() {
 	const cart = await getCartFromCookies();
+	const total =
+		cart?.orderItems.reduce((acc, item) => acc + item.quantity * (item.product?.price ?? 0), 0) ??
+		0;
 	if (!cart?.orderItems) return null;
-	const total = cart.orderItems.reduce(
-		(acc, item) => acc + item.quantity * (item.product?.price ?? 0),
-		0,
-	);
 
 	return (
 		<>
@@ -18,47 +16,15 @@ export default async function ModalCart() {
 			<div className="animation-slide-from-right absolute bottom-0 right-0 top-0 z-30 flex h-full flex-col overflow-hidden bg-white shadow-xl sm:w-1/2 lg:w-1/3">
 				<div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
 					<h3 className="text-lg font-medium text-slate-900">Shopping cart</h3>
-					<div className="mt-8">
-						{cart?.orderItems.length > 0 && (
+					{cart?.orderItems.length > 0 && (
+						<div className="mt-8">
 							<ul role="list" className="-my-6 divide-y divide-gray-200">
-								{cart.orderItems.map((item, index) => {
-									if (item.quantity < 1) return null;
-									return (
-										<li key={`${item.id}-${index}`} className="flex py-6">
-											<div className="flex h-24 w-24 flex-shrink-0 items-center justify-center overflow-hidden rounded-md border border-gray-200">
-												{item.product?.images[0] && (
-													<Image
-														src={item.product?.images[0].url}
-														alt={item.product?.name}
-														width="64"
-														height="64"
-													/>
-												)}
-											</div>
-											<div className="ml-4 flex flex-1 flex-col">
-												<div className="flex justify-between text-base font-medium text-slate-900">
-													<h3>{item.product?.name}</h3>
-													{item.product?.price && (
-														<p className="small-caps ml-4">
-															{formatMoney(item.product?.price / 100)}
-														</p>
-													)}
-												</div>
-												{item.product && (
-													<p className="mt-1 text-sm text-slate-500">
-														{item.product.categories[0]?.name}
-													</p>
-												)}
-												<div className="flex flex-1 items-end justify-between text-sm font-bold text-slate-500">
-													Quantity:{item.quantity}
-												</div>
-											</div>
-										</li>
-									);
-								})}
+								{cart.orderItems.map((item) => (
+									<CartProduct key={item.id} item={item} />
+								))}
 							</ul>
-						)}
-					</div>
+						</div>
+					)}
 				</div>
 				<div className="border-t border-gray-200 px-4 py-6 sm:px-6">
 					<div className="flex justify-between text-base font-medium text-slate-900">

@@ -1,11 +1,12 @@
 import { cookies } from "next/headers";
 import { revalidateTag } from "next/cache";
-import { executeGraphql } from "@/utils";
+import { executeGraphql } from "@/lib/utils";
 import {
 	CartAddProductDocument,
 	CartCreateDocument,
 	type CartFragment,
 	CartGetByIdDocument,
+	type Sizes,
 } from "@/gql/graphql";
 
 export async function getCartFromCookies() {
@@ -15,9 +16,7 @@ export async function getCartFromCookies() {
 			variables: { id: cartId },
 			query: CartGetByIdDocument,
 			next: { tags: ["cart"] },
-			cache: "no-store",
 		});
-
 		if (cart.order) return cart.order;
 	}
 }
@@ -31,6 +30,7 @@ export async function addToCart(variables: {
 	productId: string;
 	total: number;
 	quantity: number;
+	size: Sizes;
 }) {
 	// const product = await getProductById(productId);
 	// if (!product) {

@@ -1,4 +1,4 @@
-import { executeGraphql } from "@/utils";
+import { executeGraphql } from "@/lib/utils";
 import { CategoriesGetByCategorySlugDocument, CategoriesGetListDocument } from "@/gql/graphql";
 
 export async function getCategoryBySlug(slug: string) {

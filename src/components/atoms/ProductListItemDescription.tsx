@@ -8,7 +8,7 @@ export const ProductListItemDescription = ({
 	return (
 		<>
 			<span className="sr-only">Description</span>
-			<div className="prose text-gray-700 sm:text-lg">{description}</div>
+			<div className="prose text-base text-gray-700">{description}</div>
 		</>
 	);
 };

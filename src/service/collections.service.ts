@@ -1,4 +1,4 @@
-import { executeGraphql } from "@/utils";
+import { executeGraphql } from "@/lib/utils";
 import { CollectionsGetByCollectionSlugDocument, CollectionsGetListDocument } from "@/gql/graphql";
 
 export async function getCollectionBySlug(slug: string) {

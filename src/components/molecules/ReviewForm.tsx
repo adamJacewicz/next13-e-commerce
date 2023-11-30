@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { addReviewAction } from "@/app/product/[productId]/actions";
+import { addReviewAction } from "@/app/product/[slug]/actions";
 import { ReviewList } from "@/components/molecules/ReviewList";
 import { type Review } from "@/types/types";
 

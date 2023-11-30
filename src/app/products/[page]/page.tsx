@@ -27,7 +27,6 @@ export default async function ProductsPage({ params, searchParams }: ProductsPag
 		page,
 		order,
 	});
-
 	return (
 		<>
 			<header className="flex items-center justify-between">
