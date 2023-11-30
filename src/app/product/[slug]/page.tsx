@@ -13,6 +13,7 @@ import { ReviewForm } from "@/components/molecules/ReviewForm";
 import { addToCart, getOrCreateCart } from "@/service/cart.service";
 import { type ProductSize } from "@/types/types";
 import { type Sizes } from "@/gql/graphql";
+import { ActiveLink } from "@/components/atoms/ActiveLink";
 
 export async function generateMetadata({
 	params,
@@ -85,7 +86,24 @@ export default async function ProductPage({
 					<ProductListItemDescription product={product} />
 
 					<VariantSelect name="size" variants={sizes} />
-
+					<div className="flex flex-wrap gap-2">
+						{product.relatedProducts?.map((p) => (
+							<ActiveLink
+								className="block w-1/4 rounded-sm border"
+								activeClassName={" border-black"}
+								key={p.id}
+								href={`/product/${p.slug}`}
+							>
+								<ProductImage
+									className="p-2"
+									alt={p.name}
+									height={96}
+									width={96}
+									src={p.images[0]?.url}
+								/>
+							</ActiveLink>
+						))}
+					</div>
 					<form action={addToCartAction}>
 						<AddToCartButton disabled={!!sizes.length && !searchParams.size} />
 					</form>

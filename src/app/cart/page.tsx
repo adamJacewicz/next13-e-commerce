@@ -18,17 +18,28 @@ export default async function CartPage() {
 		0,
 	);
 	return (
-		<section className="mx-auto w-full max-w-3xl rounded-lg border bg-card p-6 text-card-foreground shadow-sm">
+		<section className="mx-auto w-full max-w-3xl">
 			<ul>
 				{cart.orderItems.map((item) => (
-					<CartProduct item={item} key={item.id} />
+					<CartProduct orderItem={item} key={item.id} />
 				))}
 			</ul>
-
-			<div className="flex items-center justify-between font-medium">
-				<span>Total: {formatMoney(total / 100)}</span>
-				<form action={handlePaymentAction}>
-					<Button type="submit">Pay</Button>
+			<div className="mt-12">
+				<div className="rounded border bg-neutral-50 px-4 py-2">
+					<div className="flex items-center justify-between gap-2 py-2">
+						<div>
+							<p className="font-semibold text-neutral-900">Your Total</p>
+							<p className="mt-1 text-sm text-neutral-500">
+								Shipping will be calculated in the next step
+							</p>
+						</div>
+						<div className="font-medium text-neutral-900">{formatMoney(total / 100)}</div>
+					</div>
+				</div>
+				<form className="mt-10 text-center" action={handlePaymentAction}>
+					<Button className="aria-disabled:cursor-not-allowed sm:w-1/3 sm:px-16" type="submit">
+						Checkout
+					</Button>
 				</form>
 			</div>
 		</section>

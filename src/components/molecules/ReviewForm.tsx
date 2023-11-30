@@ -1,5 +1,6 @@
 "use client";
 import { useOptimistic, useRef } from "react";
+import { SignedIn } from "@clerk/nextjs";
 import { InputRating } from "../atoms/InputRating";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -34,37 +35,41 @@ export function ReviewForm({ productId, reviews }: { productId: string; reviews:
 	}
 
 	return (
-		<div className="flex gap-8">
-			<form
-				ref={formRef}
-				action={formAction}
-				data-testid="add-review-form"
-				className="flex w-1/3 flex-col gap-y-4 text-xs"
-			>
-				<Label>
-					<span className="mb-1 block text-xs">Name</span>
-					<Input name="name" required />
-				</Label>
-				<Label>
-					<span className="mb-1 block text-xs">Email</span>
-					<Input type="email" name="email" required />
-				</Label>
-				<Label>
-					<span className="mb-1 block text-xs">Title</span>
-					<Input name="headline" required />
-				</Label>
-				<Label>
-					<span className="mb-1 block text-xs">Review</span>
-					<Textarea className="max-h-[150px]" name="content" required />
-				</Label>
-				<div>
-					<span className="mb-1 block text-xs">Rate</span>
-					<InputRating ref={inputRatingRef} />
-				</div>
+		<>
+			<SignedIn>
+				<div className="flex gap-8">
+					<form
+						ref={formRef}
+						action={formAction}
+						data-testid="add-review-form"
+						className="flex w-1/3 flex-col gap-y-4 text-xs"
+					>
+						<Label>
+							<span className="mb-1 block text-xs">Name</span>
+							<Input name="name" required />
+						</Label>
+						<Label>
+							<span className="mb-1 block text-xs">Email</span>
+							<Input type="email" name="email" required />
+						</Label>
+						<Label>
+							<span className="mb-1 block text-xs">Title</span>
+							<Input name="headline" required />
+						</Label>
+						<Label>
+							<span className="mb-1 block text-xs">Review</span>
+							<Textarea className="max-h-[150px]" name="content" required />
+						</Label>
+						<div>
+							<span className="mb-1 block text-xs">Rate</span>
+							<InputRating ref={inputRatingRef} />
+						</div>
 
-				<Button type="submit">Submit</Button>
-			</form>
+						<Button type="submit">Submit</Button>
+					</form>
+				</div>
+			</SignedIn>
 			<ReviewList reviews={optimisticReviews} />
-		</div>
+		</>
 	);
 }

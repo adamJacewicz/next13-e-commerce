@@ -2,15 +2,7 @@ fragment ProductListItem on Product {
     price
     name
     slug
-    description
     id
-    sizes {
-        id
-        name
-        value
-        quantity
-    }
-    color
     averageRating
     images {
         id
@@ -20,19 +12,5 @@ fragment ProductListItem on Product {
         description
         name
         id
-    }
-    collections {
-        description
-        name
-        id
-    }
-    reviews {
-        createdAt
-        rating
-        id
-        email
-        name
-        headline
-        content
     }
 }

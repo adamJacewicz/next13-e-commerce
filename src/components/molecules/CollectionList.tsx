@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Route } from "next";
+import { ArrowRight } from "lucide-react";
 import { getCollectionList } from "@/service/collections.service";
 import { type NavLink } from "@/types/types";
 
@@ -21,19 +22,19 @@ export async function CollectionList() {
 				Collections
 			</h2>
 
-			<div className="flex flex-wrap items-center gap-5">
+			<div className="flex items-center gap-5">
 				{collectionLinks.map((collection) => (
-					<div
-						className="flex-auto rounded-md bg-slate-200 px-4 py-2 shadow-xl"
+					<Link
+						href={collection.href}
+						className="rounded-md bg-gray-100 p-8"
 						key={collection.label}
 					>
-						<h3 className="mb-2 text-lg font-medium">
-							<Link className="block " href={collection.href}>
-								{collection.label}
-							</Link>
-						</h3>
-						<p>{collection.description}</p>
-					</div>
+						<header className="mb-2 flex items-center gap-3 font-medium">
+							<h3>{collection.label}</h3>
+							<ArrowRight height={18} width={18} className="text-blue-600" />
+						</header>
+						<p className="text-sm text-gray-600">{collection.description}</p>
+					</Link>
 				))}
 			</div>
 		</section>

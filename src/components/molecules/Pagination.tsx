@@ -64,7 +64,7 @@ export function Pagination({
 					<li key={pageNumber}>
 						<Button asChild variant="outline" size="icon">
 							<ActiveLink
-								className="font-semibold hover:bg-gray-100"
+								className="hover:bg-gray-100"
 								activeClassName="bg-gray-100"
 								href={getPageUrl(pageNumber)}
 							>
@@ -77,7 +77,7 @@ export function Pagination({
 					<Button variant="outline" asChild size="icon">
 						<Link
 							className={cn(
-								"bg-gray-200 hover:bg-gray-300",
+								"bg-gray-200 hover:bg-gray-100",
 								!hasNextPage && "pointer-events-none text-gray-300",
 							)}
 							prefetch={hasNextPage}
