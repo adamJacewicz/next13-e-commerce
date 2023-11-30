@@ -22,7 +22,7 @@ export function ChangeQuantity({
 	}
 
 	return (
-		<form className="flex flex-col items-center gap-2">
+		<form className="flex items-center gap-2">
 			<Button
 				variant="outline"
 				data-testid="decrement"

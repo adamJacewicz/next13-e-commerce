@@ -16,6 +16,7 @@ export async function getCartFromCookies() {
 			variables: { id: cartId },
 			query: CartGetByIdDocument,
 			next: { tags: ["cart"] },
+			cache: "no-store",
 		});
 		if (cart.order) return cart.order;
 	}

@@ -20,6 +20,7 @@ export async function changeItemQuantity({
 	await executeGraphql({
 		variables: { quantity, itemId, total },
 		query: CartSetProductQuantityDocument,
+		cache: "no-store",
 	});
 	revalidateTag("cart");
 }
@@ -28,6 +29,7 @@ export async function removeItem(itemId: string) {
 	await executeGraphql({
 		variables: { itemId },
 		query: CartRemoveProductDocument,
+		cache: "no-store",
 	});
 	// revalidateTag("cart");
 }
