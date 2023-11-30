@@ -28,14 +28,3 @@ export type OrderType = {
 	type: "name" | "price" | "rating";
 };
 export type ProductSize = Pick<Size, "quantity" | "value" | "name" | "id">;
-// export type Variant<
-// 	T extends "ProductSizeVariant" | "ProductColorVariant" =
-// 		| "ProductSizeVariant"
-// 		| "ProductColorVariant",
-// > = {
-// 	__typename: T;
-// 	id: string;
-// 	name: string;
-// 	size?: Variant<T>["__typename"] extends "ProductSizeVariant" ? ProductSize : undefined;
-// 	color?: Variant<T>["__typename"] extends "ProductColorVariant" ? { css: string } : undefined;
-// };
