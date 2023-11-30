@@ -2,6 +2,7 @@ fragment ProductListItem on Product {
     price
     name
     slug
+    description
     id
     averageRating
     images {

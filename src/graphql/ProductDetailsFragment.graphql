@@ -1,7 +1,20 @@
 fragment ProductDetails on Product {
-    ...ProductListItem
-    color
+    price
+    name
+    slug
     description
+    id
+    averageRating
+    images {
+        id
+        url
+    }
+    categories {
+        description
+        name
+        id
+    }
+    color
     sizes {
         id
         name
