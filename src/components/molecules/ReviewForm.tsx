@@ -1,56 +1,39 @@
 "use client";
-import { useOptimistic, useRef } from "react";
+import { useRef } from "react";
 import { SignedIn } from "@clerk/nextjs";
 import { InputRating } from "../atoms/InputRating";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { addReviewAction } from "@/app/product/[slug]/actions";
-import { ReviewList } from "@/components/molecules/ReviewList";
-import { type Review } from "@/types/types";
 
-export function ReviewForm({ productId, reviews }: { productId: string; reviews: Review[] }) {
-	const [optimisticReviews, setOptimisticReviews] = useOptimistic<Array<Review>, Review>(
-		reviews,
-		(state, review) => [...state, review],
-	);
+export function ReviewForm({ formAction }: { formAction: (data: FormData) => Promise<void> }) {
 	const formRef = useRef<HTMLFormElement | null>(null);
 	const inputRatingRef = useRef<{ reset: () => void } | null>(null);
-	async function formAction(data: FormData) {
-		const review = {
-			name: String(data.get("name")),
-			email: String(data.get("email")),
-			headline: String(data.get("headline")),
-			content: String(data.get("content")),
-			rating: Number(data.get("rating")),
-		};
-		setOptimisticReviews({ ...review, id: crypto.randomUUID() });
-		await addReviewAction({
-			review,
-			productId,
-		});
-		formRef.current?.reset();
-		inputRatingRef.current?.reset();
-	}
 
 	return (
-		<>
-			<SignedIn>
-				<div className="flex gap-8">
+		<SignedIn>
+			<section className="max-w-md">
+				<header>
+					<h3 className="text-lg font-medium">Share your thoughts</h3>
+					<p className="mt-1 text-sm text-gray-600">
+						If you’ve used this product, share your thoughts with other customers
+					</p>
+				</header>
+				<div className="mt-4">
 					<form
 						ref={formRef}
-						action={formAction}
+						action={async (data) => {
+							await formAction(data);
+							formRef.current?.reset();
+							inputRatingRef.current?.reset();
+						}}
 						data-testid="add-review-form"
-						className="flex w-1/3 flex-col gap-y-4 text-xs"
+						className="flex flex-col gap-4 text-xs"
 					>
 						<Label>
 							<span className="mb-1 block text-xs">Name</span>
 							<Input name="name" required />
-						</Label>
-						<Label>
-							<span className="mb-1 block text-xs">Email</span>
-							<Input type="email" name="email" required />
 						</Label>
 						<Label>
 							<span className="mb-1 block text-xs">Title</span>
@@ -68,8 +51,7 @@ export function ReviewForm({ productId, reviews }: { productId: string; reviews:
 						<Button type="submit">Submit</Button>
 					</form>
 				</div>
-			</SignedIn>
-			<ReviewList reviews={optimisticReviews} />
-		</>
+			</section>
+		</SignedIn>
 	);
 }
