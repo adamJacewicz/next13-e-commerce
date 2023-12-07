@@ -1,11 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+	output: "standalone",
 	experimental: {
 		typedRoutes: true,
 	},
 	images: {
 		remotePatterns: [{ hostname: "media.graphassets.com" }, { hostname: "img.clerk.com" }],
-		// domains: ["media.graphassets.com", "img.clerk.com"],
 	},
 	redirects: async () => {
 		return [

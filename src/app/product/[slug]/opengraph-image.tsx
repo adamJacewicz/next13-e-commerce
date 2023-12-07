@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 import Image from "next/image";
 import { getProductById } from "@/service/product.service";
 
-export const runtime = "edge";
+// export const runtime = "edge";
 export const alt = "Ecommerce";
 export const size = {
 	width: 1200,

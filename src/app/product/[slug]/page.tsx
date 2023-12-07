@@ -9,11 +9,11 @@ import { ProductListItemDescription } from "@/components/atoms/ProductListItemDe
 import { formatMoney } from "@/lib/utils";
 import { VariantSelect } from "@/components/molecules/VariantSelect";
 import { AddToCartButton } from "@/components/atoms/AddToCartButton";
-import { ReviewForm } from "@/components/molecules/ReviewForm";
 import { addToCart, getOrCreateCart } from "@/service/cart.service";
 import { type ProductSize } from "@/types/types";
 import { type Sizes } from "@/gql/graphql";
 import { ActiveLink } from "@/components/atoms/ActiveLink";
+import { ReviewList } from "@/components/molecules/ReviewList";
 
 export async function generateMetadata({
 	params,
@@ -109,7 +109,7 @@ export default async function ProductPage({
 					</form>
 				</main>
 			</section>
-			<ReviewForm reviews={product.reviews} productId={product.id} />
+			<ReviewList reviews={product.reviews} productId={product.id} />
 
 			<Suspense fallback={<LoadingIndicator />}>
 				<aside className="mt-12">
